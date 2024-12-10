@@ -1,0 +1,48 @@
+{
+    "lap_waypoints": [
+      {
+        "latitude": 13.3477445,
+        "longitude": 74.7922102,
+
+        "altitude": 90
+      },
+      {
+        "latitude": 13.3477497,
+        "longitude": 74.7921552,
+        "altitude": 90
+      },
+      {
+        "latitude": 13.3478215,
+        "longitude": 74.7921579,
+        "altitude": 90
+      },
+      {
+        "latitude": 13.3478319,
+        "longitude":74.7922102,
+        "altitude": 90
+      },
+      {
+        "latitude": 13.3478799,
+        "longitude": 74.7922108,
+        "altitude": 90
+      },
+      {
+        "latitude": 13.3478822,
+        "longitude": 74.7921609,
+        "altitude": 90
+      },
+      {
+        "latitude": 13.3479438,
+        "longitude": 74.7921615,
+        "altitude": 90
+      },
+      {
+        "latitude": 13.3479419,
+        "longitude": 74.7922092,
+        "altitude": 90
+      }
+
+    ],
+    "coverage_waypoints": [],
+    "airdrop_waypoints": []
+  }

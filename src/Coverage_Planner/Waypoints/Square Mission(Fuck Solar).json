@@ -1,0 +1,31 @@
+{
+  "lap_waypoints": [
+    {
+      "latitude": 13.3477641,
+      "longitude": 74.7922115,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.3479605,
+      "longitude": 74.7922155,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.3479637,
+      "longitude": 74.7921599,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.3477647,
+      "longitude":74.7921592 ,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.3478691,
+      "longitude": 74.7921874,
+      "altitude": 90
+    }
+  ],
+  "coverage_waypoints": [],
+  "airdrop_waypoints": []
+}

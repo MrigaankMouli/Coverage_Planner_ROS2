@@ -1,0 +1,31 @@
+running egg_info
+writing ../../build/Coverage_Planner/Coverage_Planner.egg-info/PKG-INFO
+writing dependency_links to ../../build/Coverage_Planner/Coverage_Planner.egg-info/dependency_links.txt
+writing entry points to ../../build/Coverage_Planner/Coverage_Planner.egg-info/entry_points.txt
+writing requirements to ../../build/Coverage_Planner/Coverage_Planner.egg-info/requires.txt
+writing top-level names to ../../build/Coverage_Planner/Coverage_Planner.egg-info/top_level.txt
+reading manifest file '../../build/Coverage_Planner/Coverage_Planner.egg-info/SOURCES.txt'
+writing manifest file '../../build/Coverage_Planner/Coverage_Planner.egg-info/SOURCES.txt'
+running build
+running build_py
+copying Coverage_Planner/WaypointGeneration.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/OdometryTest.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/Connect.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/Takeoff_and_Land_Test.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/__init__.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/WpGenerationTest.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/Takeoff.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/SimpleMission.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/Waypoint.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+copying Coverage_Planner/Control_Test.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+running install
+running install_lib
+running install_data
+copying resource/Coverage_Planner -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/ament_index/resource_index/packages
+copying package.xml -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/Coverage_Planner
+running install_egg_info
+removing '/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../build/Coverage_Planner/Coverage_Planner.egg-info to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner-0.0.0-py3.10.egg-info
+running install_scripts
+Installing Connect script to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner
+writing list of installed files to '/home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/install.log'
