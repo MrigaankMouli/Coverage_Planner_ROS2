@@ -1,0 +1,400 @@
+[0.112s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'list', '-p', '--base-paths', '/home/zero/Desktop/ISDC/cov_ws']
+[0.112s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='list', build_base='build', ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['/home/zero/Desktop/ISDC/cov_ws'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], topological_order=False, names_only=False, paths_only=True, topological_graph=False, topological_graph_dot=False, topological_graph_density=False, topological_graph_legend=False, topological_graph_dot_cluster=False, topological_graph_dot_include_skipped=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x73ebd0d7a1d0>, verb_extension=<colcon_package_information.verb.list.ListVerb object at 0x73ebd0e866b0>, main=<bound method ListVerb.main of <colcon_package_information.verb.list.ListVerb object at 0x73ebd0e866b0>>, mixin_verb=('list',))
+[0.148s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.148s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.148s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.148s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.148s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.148s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/zero/Desktop/ISDC/cov_ws'
+[0.148s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extensions ['ignore', 'ignore_ament_install']
+[0.148s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extension 'ignore'
+[0.148s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extension 'ignore_ament_install'
+[0.149s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extensions ['colcon_pkg']
+[0.149s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extension 'colcon_pkg'
+[0.149s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extensions ['colcon_meta']
+[0.149s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extension 'colcon_meta'
+[0.149s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extensions ['ros']
+[0.149s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extension 'ros'
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extensions ['cmake', 'python']
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extension 'cmake'
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extension 'python'
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extensions ['python_setup_py']
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws) by extension 'python_setup_py'
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/build) by extensions ['ignore', 'ignore_ament_install']
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/build) by extension 'ignore'
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/build) ignored
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/install) by extensions ['ignore', 'ignore_ament_install']
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/install) by extension 'ignore'
+[0.163s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/install) ignored
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/log) by extensions ['ignore', 'ignore_ament_install']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/log) by extension 'ignore'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/log) ignored
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extensions ['ignore', 'ignore_ament_install']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extension 'ignore'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extension 'ignore_ament_install'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extensions ['colcon_pkg']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extension 'colcon_pkg'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extensions ['colcon_meta']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extension 'colcon_meta'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extensions ['ros']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extension 'ros'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extensions ['cmake', 'python']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extension 'cmake'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extension 'python'
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extensions ['python_setup_py']
+[0.164s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src) by extension 'python_setup_py'
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extensions ['ignore', 'ignore_ament_install']
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extension 'ignore'
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extension 'ignore_ament_install'
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extensions ['colcon_pkg']
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extension 'colcon_pkg'
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extensions ['colcon_meta']
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extension 'colcon_meta'
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extensions ['ros']
+[0.165s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner) by extension 'ros'
+[0.167s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner' with type 'ros.ament_python' and name 'Coverage_Planner'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extensions ['ignore', 'ignore_ament_install']
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extension 'ignore'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extension 'ignore_ament_install'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extensions ['colcon_pkg']
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extension 'colcon_pkg'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extensions ['colcon_meta']
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extension 'colcon_meta'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extensions ['ros']
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extension 'ros'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extensions ['cmake', 'python']
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extension 'cmake'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extension 'python'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extensions ['python_setup_py']
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot) by extension 'python_setup_py'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extensions ['ignore', 'ignore_ament_install']
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extension 'ignore'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extension 'ignore_ament_install'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extensions ['colcon_pkg']
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extension 'colcon_pkg'
+[0.168s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extensions ['colcon_meta']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extension 'colcon_meta'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extensions ['ros']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extension 'ros'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extensions ['cmake', 'python']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extension 'cmake'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extension 'python'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extensions ['python_setup_py']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gazebo) by extension 'python_setup_py'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extensions ['ignore', 'ignore_ament_install']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extension 'ignore'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extension 'ignore_ament_install'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extensions ['colcon_pkg']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extension 'colcon_pkg'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extensions ['colcon_meta']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extension 'colcon_meta'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extensions ['ros']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extension 'ros'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extensions ['cmake', 'python']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extension 'cmake'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extension 'python'
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extensions ['python_setup_py']
+[0.169s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz) by extension 'python_setup_py'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extensions ['ignore', 'ignore_ament_install']
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extension 'ignore'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extension 'ignore_ament_install'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extensions ['colcon_pkg']
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extension 'colcon_pkg'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extensions ['colcon_meta']
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extension 'colcon_meta'
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extensions ['ros']
+[0.170s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application) by extension 'ros'
+[0.171s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_application' with type 'ros.ament_cmake' and name 'ardupilot_gz_application'
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extensions ['ignore', 'ignore_ament_install']
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extension 'ignore'
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extension 'ignore_ament_install'
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extensions ['colcon_pkg']
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extension 'colcon_pkg'
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extensions ['colcon_meta']
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extension 'colcon_meta'
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extensions ['ros']
+[0.171s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup) by extension 'ros'
+[0.172s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_bringup' with type 'ros.ament_cmake' and name 'ardupilot_gz_bringup'
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extensions ['ignore', 'ignore_ament_install']
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extension 'ignore'
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extension 'ignore_ament_install'
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extensions ['colcon_pkg']
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extension 'colcon_pkg'
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extensions ['colcon_meta']
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extension 'colcon_meta'
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extensions ['ros']
+[0.172s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description) by extension 'ros'
+[0.173s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_description' with type 'ros.ament_cmake' and name 'ardupilot_gz_description'
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extensions ['ignore', 'ignore_ament_install']
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extension 'ignore'
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extension 'ignore_ament_install'
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extensions ['colcon_pkg']
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extension 'colcon_pkg'
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extensions ['colcon_meta']
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extension 'colcon_meta'
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extensions ['ros']
+[0.173s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo) by extension 'ros'
+[0.178s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_gz/ardupilot_gz_gazebo' with type 'ros.ament_cmake' and name 'ardupilot_gz_gazebo'
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extensions ['ignore', 'ignore_ament_install']
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extension 'ignore'
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extension 'ignore_ament_install'
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extensions ['colcon_pkg']
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extension 'colcon_pkg'
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extensions ['colcon_meta']
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extension 'colcon_meta'
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extensions ['ros']
+[0.178s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extension 'ros'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extensions ['cmake', 'python']
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extension 'cmake'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extension 'python'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extensions ['python_setup_py']
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ardupilot_sitl_models) by extension 'python_setup_py'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extensions ['ignore', 'ignore_ament_install']
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extension 'ignore'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extension 'ignore_ament_install'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extensions ['colcon_pkg']
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extension 'colcon_pkg'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extensions ['colcon_meta']
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extension 'colcon_meta'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extensions ['ros']
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extension 'ros'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extensions ['cmake', 'python']
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extension 'cmake'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extension 'python'
+[0.179s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extensions ['python_setup_py']
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent) by extension 'python_setup_py'
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extensions ['ignore', 'ignore_ament_install']
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extension 'ignore'
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extension 'ignore_ament_install'
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extensions ['colcon_pkg']
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extension 'colcon_pkg'
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extensions ['colcon_meta']
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extension 'colcon_meta'
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extensions ['ros']
+[0.180s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent) by extension 'ros'
+[0.181s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/micro_ros_agent' with type 'ros.ament_cmake' and name 'micro_ros_agent'
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extensions ['ignore', 'ignore_ament_install']
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extension 'ignore'
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extension 'ignore_ament_install'
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extensions ['colcon_pkg']
+[0.181s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extension 'colcon_pkg'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extensions ['colcon_meta']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extension 'colcon_meta'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extensions ['ros']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extension 'ros'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extensions ['cmake', 'python']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extension 'cmake'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extension 'python'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extensions ['python_setup_py']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap) by extension 'python_setup_py'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extensions ['ignore', 'ignore_ament_install']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extension 'ignore'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extension 'ignore_ament_install'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extensions ['colcon_pkg']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extension 'colcon_pkg'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extensions ['colcon_meta']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extension 'colcon_meta'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extensions ['ros']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extension 'ros'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extensions ['cmake', 'python']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extension 'cmake'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extension 'python'
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extensions ['python_setup_py']
+[0.182s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/hooks) by extension 'python_setup_py'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extensions ['ignore', 'ignore_ament_install']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extension 'ignore'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extension 'ignore_ament_install'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extensions ['colcon_pkg']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extension 'colcon_pkg'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extensions ['colcon_meta']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extension 'colcon_meta'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extensions ['ros']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extension 'ros'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extensions ['cmake', 'python']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extension 'cmake'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extension 'python'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extensions ['python_setup_py']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/micro_ros_agent/snap/local) by extension 'python_setup_py'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extensions ['ignore', 'ignore_ament_install']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extension 'ignore'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extension 'ignore_ament_install'
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extensions ['colcon_pkg']
+[0.183s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extension 'colcon_pkg'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extensions ['colcon_meta']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extension 'colcon_meta'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extensions ['ros']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extension 'ros'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extensions ['cmake', 'python']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extension 'cmake'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extension 'python'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extensions ['python_setup_py']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz) by extension 'python_setup_py'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extensions ['ignore', 'ignore_ament_install']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extension 'ignore'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extension 'ignore_ament_install'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extensions ['colcon_pkg']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extension 'colcon_pkg'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extensions ['colcon_meta']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extension 'colcon_meta'
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extensions ['ros']
+[0.184s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz) by extension 'ros'
+[0.185s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz' with type 'ros.ament_cmake' and name 'ros_gz'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extensions ['ignore', 'ignore_ament_install']
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extension 'ignore'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extension 'ignore_ament_install'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extensions ['colcon_pkg']
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extension 'colcon_pkg'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extensions ['colcon_meta']
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extension 'colcon_meta'
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extensions ['ros']
+[0.185s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge) by extension 'ros'
+[0.198s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_bridge' with type 'ros.ament_cmake' and name 'ros_gz_bridge'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extensions ['ignore', 'ignore_ament_install']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extension 'ignore'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extension 'ignore_ament_install'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extensions ['colcon_pkg']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extension 'colcon_pkg'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extensions ['colcon_meta']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extension 'colcon_meta'
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extensions ['ros']
+[0.199s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image) by extension 'ros'
+[0.215s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_image' with type 'ros.ament_cmake' and name 'ros_gz_image'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extensions ['ignore', 'ignore_ament_install']
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extension 'ignore'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extension 'ignore_ament_install'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extensions ['colcon_pkg']
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extension 'colcon_pkg'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extensions ['colcon_meta']
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extension 'colcon_meta'
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extensions ['ros']
+[0.215s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces) by extension 'ros'
+[0.216s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_interfaces' with type 'ros.ament_cmake' and name 'ros_gz_interfaces'
+[0.216s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_point_cloud) by extensions ['ignore', 'ignore_ament_install']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_point_cloud) by extension 'ignore'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_point_cloud) ignored
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extensions ['ignore', 'ignore_ament_install']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extension 'ignore'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extension 'ignore_ament_install'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extensions ['colcon_pkg']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extension 'colcon_pkg'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extensions ['colcon_meta']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extension 'colcon_meta'
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extensions ['ros']
+[0.217s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim) by extension 'ros'
+[0.250s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim' with type 'ros.ament_cmake' and name 'ros_gz_sim'
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extensions ['ignore', 'ignore_ament_install']
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extension 'ignore'
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extension 'ignore_ament_install'
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extensions ['colcon_pkg']
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extension 'colcon_pkg'
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extensions ['colcon_meta']
+[0.250s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extension 'colcon_meta'
+[0.251s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extensions ['ros']
+[0.251s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos) by extension 'ros'
+[0.252s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_gz_sim_demos' with type 'ros.ament_cmake' and name 'ros_gz_sim_demos'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extensions ['ignore', 'ignore_ament_install']
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extension 'ignore'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extension 'ignore_ament_install'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extensions ['colcon_pkg']
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extension 'colcon_pkg'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extensions ['colcon_meta']
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extension 'colcon_meta'
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extensions ['ros']
+[0.253s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign) by extension 'ros'
+[0.253s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign' with type 'ros.ament_cmake' and name 'ros_ign'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extensions ['ignore', 'ignore_ament_install']
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extension 'ignore'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extension 'ignore_ament_install'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extensions ['colcon_pkg']
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extension 'colcon_pkg'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extensions ['colcon_meta']
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extension 'colcon_meta'
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extensions ['ros']
+[0.254s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge) by extension 'ros'
+[0.254s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_bridge' with type 'ros.ament_cmake' and name 'ros_ign_bridge'
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extensions ['ignore', 'ignore_ament_install']
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extension 'ignore'
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extension 'ignore_ament_install'
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extensions ['colcon_pkg']
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extension 'colcon_pkg'
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extensions ['colcon_meta']
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extension 'colcon_meta'
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extensions ['ros']
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo) by extension 'ros'
+[0.256s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo' with type 'ros.ament_cmake' and name 'ros_ign_gazebo'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extensions ['ignore', 'ignore_ament_install']
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extension 'ignore'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extension 'ignore_ament_install'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extensions ['colcon_pkg']
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extension 'colcon_pkg'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extensions ['colcon_meta']
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extension 'colcon_meta'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extensions ['ros']
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos) by extension 'ros'
+[0.256s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_gazebo_demos' with type 'ros.ament_cmake' and name 'ros_ign_gazebo_demos'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extensions ['ignore', 'ignore_ament_install']
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extension 'ignore'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extension 'ignore_ament_install'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extensions ['colcon_pkg']
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extension 'colcon_pkg'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extensions ['colcon_meta']
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extension 'colcon_meta'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extensions ['ros']
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image) by extension 'ros'
+[0.257s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_image' with type 'ros.ament_cmake' and name 'ros_ign_image'
+[0.257s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extensions ['ignore', 'ignore_ament_install']
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extension 'ignore'
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extension 'ignore_ament_install'
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extensions ['colcon_pkg']
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extension 'colcon_pkg'
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extensions ['colcon_meta']
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extension 'colcon_meta'
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extensions ['ros']
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces) by extension 'ros'
+[0.258s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/ros_ign_interfaces' with type 'ros.ament_cmake' and name 'ros_ign_interfaces'
+[0.258s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extensions ['ignore', 'ignore_ament_install']
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extension 'ignore'
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extension 'ignore_ament_install'
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extensions ['colcon_pkg']
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extension 'colcon_pkg'
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extensions ['colcon_meta']
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extension 'colcon_meta'
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extensions ['ros']
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge) by extension 'ros'
+[0.259s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/ros_gz/test_ros_gz_bridge' with type 'ros.ament_cmake' and name 'test_ros_gz_bridge'
+[0.259s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extensions ['ignore', 'ignore_ament_install']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extension 'ignore'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extension 'ignore_ament_install'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extensions ['colcon_pkg']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extension 'colcon_pkg'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extensions ['colcon_meta']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extension 'colcon_meta'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extensions ['ros']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extension 'ros'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extensions ['cmake', 'python']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extension 'cmake'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extension 'python'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extensions ['python_setup_py']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf) by extension 'python_setup_py'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extensions ['ignore', 'ignore_ament_install']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extension 'ignore'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extension 'ignore_ament_install'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extensions ['colcon_pkg']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extension 'colcon_pkg'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extensions ['colcon_meta']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extension 'colcon_meta'
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extensions ['ros']
+[0.260s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files) by extension 'ros'
+[0.261s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_test_files' with type 'ros.cmake' and name 'sdformat_test_files'
+[0.261s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extensions ['ignore', 'ignore_ament_install']
+[0.261s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extension 'ignore'
+[0.261s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extension 'ignore_ament_install'
+[0.261s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extensions ['colcon_pkg']
+[0.261s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extension 'colcon_pkg'
+[0.262s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extensions ['colcon_meta']
+[0.262s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extension 'colcon_meta'
+[0.262s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extensions ['ros']
+[0.262s] Level 1:colcon.colcon_core.package_identification:_identify(/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf) by extension 'ros'
+[0.267s] DEBUG:colcon.colcon_core.package_identification:Package '/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf' with type 'ros.ament_cmake' and name 'sdformat_urdf'
+[0.267s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.289s] INFO:colcon.colcon_metadata.metadata.colcon_pkg:Updating descriptor of package '/home/zero/Desktop/ISDC/cov_ws/src/sdformat_urdf/sdformat_urdf' from colcon.pkg: {'dependencies': ['sdformat9']}

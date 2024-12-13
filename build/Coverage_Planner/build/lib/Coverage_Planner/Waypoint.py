@@ -80,8 +80,8 @@ def arm_drone(controller):
         0,
         0, 0, 0, 0, 0
     )
-    time.sleep(2)
     print("Drone armed.")
+    time.sleep(5)
 
 def takeoff_drone(controller, altitude):
     """
@@ -174,20 +174,14 @@ class CubePilotOdometryNode(Node):
 
     def __init__(self,controller):
         super().__init__('cube_pilot_odom_publisher')
-        self.odom_pub = self.create_publisher(Odometry, '/odom', 10)
-        self.gps_pub = self.create_publisher(NavSatFix, '/gps', 10)
-        self.imu_pub = self.create_publisher(Imu, '/imu', 10)
-
-        self.get_logger().info(f"Attempting to connect with CubePilot on {SERIAL_PORT_CUBEPILOT}")
+        self.odom_pub = self.create_publisher(Odometry, '/odom_cube', 10)
+        self.gps_pub = self.create_publisher(NavSatFix, '/gps_cube', 10)
+        self.imu_pub = self.create_publisher(Imu, '/imu_cube', 10)
         
         self.CubePilot = controller
-        self.get_logger().info(f"Heartbeat from system (system {self.CubePilot.target_system} component {self.CubePilot.target_component})")
-        self.get_logger().info("Connection to CubePilot is Successful")
 
-        self.timer = self.create_timer(0.1, self.publish_odom)
+        self.timer = self.create_timer(0.5, self.publish_odom)
         
-        self.CubePilot.mav.request_data_stream_send(self.CubePilot.target_system, self.CubePilot.target_component, mavutil.mavlink.MAV_DATA_STREAM_ALL, 1, 1)
-
     def publish_odom(self):
 
         self.CubePilot.mav.request_data_stream_send(
@@ -235,6 +229,8 @@ class CubePilotOdometryNode(Node):
 
             self.gps_pub.publish(gps_msg)
             self.get_logger().info(f"Published GPS data: Latitude={gps_msg.latitude}, Longitude={gps_msg.longitude}, Altitude={gps_msg.altitude}")
+        else:
+            self.get_logger().warn("GPS Message not available, skipping GPS coordinates ")    
 
         msg3 = self.CubePilot.recv_match(type='HIGHRES_IMU',blocking=False)
 
@@ -260,16 +256,22 @@ class CubePilotOdometryNode(Node):
             
             self.imu_pub.publish(imu_msg)
             self.get_logger().info("Published IMU data with quaternion.")
+        else:
+            self.get_logger().warn("IMU Message not Availible.")
 
 
-def Start_Waypoint(controller):
-    """
-    Thread to start the Manual Waypoint Navigation
+def main():
+    print("Initializing connection...")
+    controller = mavutil.mavlink_connection(SERIAL_PORT_CUBEPILOT)
+    controller.wait_heartbeat()
+    print("Connection established.")
 
-    """
     set_mode(controller, 4)
     arm_drone(controller)
-    takeoff_drone(controller, altitude=3)
+    takeoff_drone(controller, altitude=7)
+
+    Odom_Pub_thread = threading.Thread(target=OdomThread_Func,args=(controller,),daemon=True)
+    Odom_Pub_thread.start()
 
     square_points = [
         (10, 0),
@@ -285,11 +287,11 @@ def Start_Waypoint(controller):
 
     os._exit(0)
 
-def main(args = None):
-    print("Initializing connection...")
-    controller = mavutil.mavlink_connection(SERIAL_PORT_CUBEPILOT)
-    controller.wait_heartbeat()
-    print("Connection established.")
+def OdomThread_Func(controller):
+    """
+    Thread to start the Odometry, IMU and GPS data Publisher
+
+    """
 
     controller.mav.command_long_send(
             controller.target_system,
@@ -301,11 +303,8 @@ def main(args = None):
         )
 
 
-    rclpy.init(args=args)
+    rclpy.init(args=None)
     cube_pilot_node = CubePilotOdometryNode(controller)
-
-    waypoint_thread = threading.Thread(target=Start_Waypoint,args=(controller,),daemon=False)
-    waypoint_thread.start()
 
     rclpy.spin(cube_pilot_node)
 
