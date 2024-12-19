@@ -1,6 +1,7 @@
 [console_scripts]
 ArmCheck = Coverage_Planner.ArmDisarm:main
 Connect = Coverage_Planner.Connect:main
+CubeOrangeTest = Coverage_Planner.CubeOrangeTest:main
 Mission = Coverage_Planner.Mission:main
 Odometry = Coverage_Planner.OdometryPub:main
 Takeoff_Land = Coverage_Planner.Takeoff_and_Land_Test:main

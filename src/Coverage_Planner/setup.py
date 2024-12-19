@@ -28,7 +28,8 @@ setup(
             'WaypointGeneration = Coverage_Planner.WpGenerationTest:main',
             'Takeoff_Land = Coverage_Planner.Takeoff_and_Land_Test:main',
             'WaypointManual = Coverage_Planner.Waypoint:main',
-            'ArmCheck = Coverage_Planner.ArmDisarm:main'
+            'ArmCheck = Coverage_Planner.ArmDisarm:main',
+            'CubeOrangeTest = Coverage_Planner.CubeOrangeTest:main'
         ],
     },
 )

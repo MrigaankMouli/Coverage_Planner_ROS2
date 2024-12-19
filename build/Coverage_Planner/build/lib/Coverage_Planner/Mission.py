@@ -258,33 +258,22 @@ def start_mission(controller):
 SERIAL_PORT_CUBEPILOT = "/dev/ttyACM0"
 
 class CubePilotOdometryNode(Node):
+    """
+    Node to Publish the Odometry, IMU and GPS data from the GPS and the CubeOrange IMU as ROS2 messages
+
+    """
+
     def __init__(self,controller):
         super().__init__('cube_pilot_odom_publisher')
-        self.odom_pub = self.create_publisher(Odometry, '/odom', 10)
-        self.gps_pub = self.create_publisher(NavSatFix, '/gps', 10)
-        self.imu_pub = self.create_publisher(Imu, '/imu', 10)
-
-        self.get_logger().info(f"Attempting to connect with CubePilot on {SERIAL_PORT_CUBEPILOT}")
+        self.odom_pub = self.create_publisher(Odometry, '/odom_cube', 10)
+        self.gps_pub = self.create_publisher(NavSatFix, '/gps_cube', 10)
+        self.imu_pub = self.create_publisher(Imu, '/imu_cube', 10)
         
         self.CubePilot = controller
-        self.get_logger().info(f"Heartbeat from system (system {self.CubePilot.target_system} component {self.CubePilot.target_component})")
-        self.get_logger().info("Connection to CubePilot is Successful")
 
-        self.timer = self.create_timer(0.1, self.publish_odom)
+        self.timer = self.create_timer(0.5, self.publish_odom)
         
-        self.CubePilot.mav.request_data_stream_send(self.CubePilot.target_system, self.CubePilot.target_component, mavutil.mavlink.MAV_DATA_STREAM_ALL, 1, 1)
-
     def publish_odom(self):
-
-        self.CubePilot.mav.command_long_send(
-            self.CubePilot.target_system,
-            self.CubePilot.target_component,
-            mavutil.mavlink.MAV_CMD_DO_SET_HOME,
-            1,
-            0, 0, 0, 0,
-            1, 1, 1
-        )
-
 
         self.CubePilot.mav.request_data_stream_send(
             self.CubePilot.target_system,
@@ -331,31 +320,68 @@ class CubePilotOdometryNode(Node):
 
             self.gps_pub.publish(gps_msg)
             self.get_logger().info(f"Published GPS data: Latitude={gps_msg.latitude}, Longitude={gps_msg.longitude}, Altitude={gps_msg.altitude}")
+        else:
+            self.get_logger().warn("GPS Message not available, skipping GPS coordinates ")    
 
-        msg3 = self.CubePilot.recv_match(type='HIGHRES_IMU',blocking=False)
+        msg3 = self.CubePilot.recv_match(type='SCALED_IMU2',blocking=False)
 
         if msg3:
             imu_msg = Imu()
             imu_msg.header.stamp = self.get_clock().now().to_msg()
             imu_msg.header.frame_id ='imu'
-            imu_msg.linear_acceleration.x = msg.xacc
-            imu_msg.linear_acceleration.y = msg.yacc
-            imu_msg.linear_acceleration.z = msg.zacc
+            imu_msg.linear_acceleration.x = float(msg3.xacc)
+            imu_msg.linear_acceleration.y = float(msg3.yacc)
+            imu_msg.linear_acceleration.z = float(msg3.zacc)
 
-            imu_msg.angular_velocity.x = msg.xgyro
-            imu_msg.angular_velocity.y = msg.ygyro
-            imu_msg.angular_velocity.z = msg.zgyro
+            imu_msg.angular_velocity.x = float(msg3.xgyro)
+            imu_msg.angular_velocity.y = float(msg3.ygyro)
+            imu_msg.angular_velocity.z = float(msg3.zgyro)
 
-            quaternion = quaternion_from_euler(msg1.roll, msg1.pitch, msg1.yaw)
+            r = R.from_euler('xyz', [msg1.roll, msg1.pitch, msg1.yaw], degrees=False)
+            quaternion = r.as_quat()
 
             imu_msg.orientation.x = quaternion[0]
             imu_msg.orientation.y = quaternion[1]
             imu_msg.orientation.z = quaternion[2]
             imu_msg.orientation.w = quaternion[3]
-
             
             self.imu_pub.publish(imu_msg)
             self.get_logger().info("Published IMU data with quaternion.")
+        else:
+            self.get_logger().warn("IMU Message not Availible.")
+
+
+def PubThread_Func(controller):
+    """
+    Thread to start the Odometry, IMU and GPS data Publisher
+
+    """
+
+    gps_msg = controller.recv_match(type='GLOBAL_POSITION_INT', blocking=True)
+    if gps_msg:
+        current_lat = gps_msg.lat/1e7  
+        current_lon = gps_msg.lon/1e7
+        relative_alt = gps_msg.relative_alt/1000
+
+
+    controller.mav.command_long_send(
+        controller.target_system,        
+        controller.target_component,
+        mavutil.mavlink.MAV_CMD_DO_SET_HOME,  
+        0,                               
+        1,                               
+        0,                               
+        0,                               
+        0,                               
+        current_lat,
+        current_lon,                     
+        relative_alt
+    )
+    rclpy.init(args=None)
+    cube_pilot_node = CubePilotOdometryNode(controller)
+
+    rclpy.spin(cube_pilot_node)
+
 
 def main(args=None):
 
@@ -363,40 +389,11 @@ def main(args=None):
     controller = mavutil.mavlink_connection("/dev/ttyACM0")
     controller.wait_heartbeat()
     print("Connection established.")
-
-    rclpy.init(args=args)
-    cube_pilot_node = CubePilotOdometryNode(controller)
     
     monitor_thread = threading.Thread(target=monitor_thread_func,args=(controller,),daemon=True)
     monitor_thread.start()
 
-    mission_thread = threading.Thread(target=Perform_Mission,args=(controller,),daemon=True)
-    mission_thread.start()
 
-    rclpy.spin(cube_pilot_node)
-
-
-    
-    # print("Setting Mode to Guided")
-    # set_mode(controller,mode=4)
-    # time.sleep(20)
-
-    # cube_pilot_node.destroy_node()
-    # rclpy.shutdown()
-
-    # # home_pos = load_home_position(controller)
-    # # lap_waypoints = load_lap_waypoints("Test Mission(I'm scared af).json")
-    # # upload_mission(controller, home_pos, lap_waypoints,altitude=7)
-    # # arm_drone(controller)
-    # # takeoff_drone(controller,altitude=7)
-    # # time.sleep(2)
-    # # set_mode(controller,mode=3)
-    # # time.sleep(2)
-    # # start_mission(controller)
-
-    # time.sleep(2000)
-
-def Perform_Mission(controller):
     print("Setting Mode to Guided")
     set_mode(controller,mode=4)
     time.sleep(1)
@@ -408,6 +405,10 @@ def Perform_Mission(controller):
     arm_drone(controller)
     takeoff_drone(controller,altitude=7)
     time.sleep(8)
+
+    publisher_thread = threading.Thread(target=PubThread_Func,args=(controller,),daemon=True)
+    publisher_thread.start()
+    
     set_mode(controller,mode=3)
     time.sleep(2)
     start_mission(controller)
