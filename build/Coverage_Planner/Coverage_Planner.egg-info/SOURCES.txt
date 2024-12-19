@@ -8,6 +8,7 @@ setup.py
 ../../build/Coverage_Planner/Coverage_Planner.egg-info/requires.txt
 ../../build/Coverage_Planner/Coverage_Planner.egg-info/top_level.txt
 ../../build/Coverage_Planner/Coverage_Planner.egg-info/zip-safe
+Coverage_Planner/ArmDisarm.py
 Coverage_Planner/Connect.py
 Coverage_Planner/Control_Test.py
 Coverage_Planner/CoverageWaypointGeneration.py

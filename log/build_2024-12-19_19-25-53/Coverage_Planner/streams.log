@@ -1,0 +1,50 @@
+[1.280s] Invoking command in '/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner': PYTHONPATH=/home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/Coverage_Planner build --build-base /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build install --record /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/install.log --single-version-externally-managed install_data
+[1.669s] running egg_info
+[1.697s] writing ../../build/Coverage_Planner/Coverage_Planner.egg-info/PKG-INFO
+[1.698s] writing dependency_links to ../../build/Coverage_Planner/Coverage_Planner.egg-info/dependency_links.txt
+[1.698s] writing entry points to ../../build/Coverage_Planner/Coverage_Planner.egg-info/entry_points.txt
+[1.699s] writing requirements to ../../build/Coverage_Planner/Coverage_Planner.egg-info/requires.txt
+[1.699s] writing top-level names to ../../build/Coverage_Planner/Coverage_Planner.egg-info/top_level.txt
+[1.760s] reading manifest file '../../build/Coverage_Planner/Coverage_Planner.egg-info/SOURCES.txt'
+[1.762s] writing manifest file '../../build/Coverage_Planner/Coverage_Planner.egg-info/SOURCES.txt'
+[1.762s] running build
+[1.762s] running build_py
+[1.763s] copying Coverage_Planner/OdometryTest.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.763s] copying Coverage_Planner/CoverageWaypointGeneration.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.764s] copying Coverage_Planner/Connect.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.764s] copying Coverage_Planner/Takeoff_and_Land_Test.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.764s] copying Coverage_Planner/__init__.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.764s] copying Coverage_Planner/ArmDisarm.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.764s] copying Coverage_Planner/OdometryPub.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.765s] copying Coverage_Planner/SimpleMission.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.765s] copying Coverage_Planner/Waypoint.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.765s] copying Coverage_Planner/Mission.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.766s] copying Coverage_Planner/Control_Test.py -> /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner
+[1.766s] running install
+[1.772s] running install_lib
+[1.805s] copying /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner/ArmDisarm.py -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner
+[1.805s] copying /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build/lib/Coverage_Planner/Waypoint.py -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner
+[1.806s] byte-compiling /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/ArmDisarm.py to ArmDisarm.cpython-310.pyc
+[1.807s] byte-compiling /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/Waypoint.py to Waypoint.cpython-310.pyc
+[1.809s] running install_data
+[1.810s] copying resource/Coverage_Planner -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/ament_index/resource_index/packages
+[1.810s] copying package.xml -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/Coverage_Planner
+[1.810s] copying Waypoints/coverage_waypoints.json -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/Coverage_Planner/Waypoints
+[1.812s] copying Waypoints/CoverageTest.json -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/Coverage_Planner/Waypoints
+[1.813s] copying Waypoints/Square Mission(Fuck Solar).json -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/Coverage_Planner/Waypoints
+[1.813s] copying Waypoints/Test Mission(I'm scared af).json -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/Coverage_Planner/Waypoints
+[1.814s] copying Waypoints/First Mission(I'm still scared af).json -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/Coverage_Planner/Waypoints
+[1.814s] copying Waypoints/coverage_boundary.json -> /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/Coverage_Planner/Waypoints
+[1.814s] running install_egg_info
+[1.845s] removing '/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner-0.0.0-py3.10.egg-info' (and everything under it)
+[1.846s] Copying ../../build/Coverage_Planner/Coverage_Planner.egg-info to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner-0.0.0-py3.10.egg-info
+[1.847s] running install_scripts
+[2.077s] Installing ArmCheck script to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner
+[2.077s] Installing Connect script to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner
+[2.078s] Installing Mission script to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner
+[2.078s] Installing Odometry script to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner
+[2.078s] Installing Takeoff_Land script to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner
+[2.079s] Installing WaypointGeneration script to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner
+[2.079s] Installing WaypointManual script to /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner
+[2.080s] writing list of installed files to '/home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/install.log'
+[2.108s] Invoked command in '/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner' returned '0': PYTHONPATH=/home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/Coverage_Planner build --build-base /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/build install --record /home/zero/Desktop/ISDC/cov_ws/build/Coverage_Planner/install.log --single-version-externally-managed install_data

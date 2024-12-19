@@ -9,6 +9,7 @@ import threading
 from ament_index_python.packages import get_package_share_directory
 from scipy.spatial.transform import Rotation as R
 import os
+import json
 
 def set_mode(controller, mode):
     """
@@ -131,6 +132,7 @@ def navigate_waypoints(controller, waypoints, altitude=-3):
             current_east = msg.y
             if abs(current_north - north) < 0.2 and abs(current_east - east) < 0.2:
                 print("Waypoint reached")
+                time.sleep(4)
                 lat, lon = get_lat_lon(controller)
                 print(f"Current Lat, Lon: {lat}, {lon}")
                 coordinates.append({"lat": lat, "lon": lon})
@@ -138,6 +140,23 @@ def navigate_waypoints(controller, waypoints, altitude=-3):
             time.sleep(1)
 
     return coordinates
+
+def land_vehicle(controller):
+    print("Initiating landing...")
+    try:
+        controller.mav.command_long_send(
+            controller.target_system,
+            controller.target_component,
+            mavutil.mavlink.MAV_CMD_NAV_LAND,
+            0,
+            0,
+            0, 0, 0, 0, 0, 0
+        )
+        print("Landing command sent")
+        return True
+    except Exception as e:
+            print(f"Failed to send landing command. Error: {e}")
+            return False
 
 
 def disarm_drone(controller):
@@ -232,19 +251,19 @@ class CubePilotOdometryNode(Node):
         else:
             self.get_logger().warn("GPS Message not available, skipping GPS coordinates ")    
 
-        msg3 = self.CubePilot.recv_match(type='HIGHRES_IMU',blocking=False)
+        msg3 = self.CubePilot.recv_match(type='SCALED_IMU2',blocking=False)
 
         if msg3:
             imu_msg = Imu()
             imu_msg.header.stamp = self.get_clock().now().to_msg()
             imu_msg.header.frame_id ='imu'
-            imu_msg.linear_acceleration.x = msg.xacc
-            imu_msg.linear_acceleration.y = msg.yacc
-            imu_msg.linear_acceleration.z = msg.zacc
+            imu_msg.linear_acceleration.x = float(msg3.xacc)
+            imu_msg.linear_acceleration.y = float(msg3.yacc)
+            imu_msg.linear_acceleration.z = float(msg3.zacc)
 
-            imu_msg.angular_velocity.x = msg.xgyro
-            imu_msg.angular_velocity.y = msg.ygyro
-            imu_msg.angular_velocity.z = msg.zgyro
+            imu_msg.angular_velocity.x = float(msg3.xgyro)
+            imu_msg.angular_velocity.y = float(msg3.ygyro)
+            imu_msg.angular_velocity.z = float(msg3.zgyro)
 
             r = R.from_euler('xyz', [msg1.roll, msg1.pitch, msg1.yaw], degrees=False)
             quaternion = r.as_quat()
@@ -261,7 +280,7 @@ class CubePilotOdometryNode(Node):
 
 
 def main():
-    print("Initializing connection...")
+    print("Initializing Connection...")
     controller = mavutil.mavlink_connection(SERIAL_PORT_CUBEPILOT)
     controller.wait_heartbeat()
     print("Connection established.")
@@ -270,6 +289,7 @@ def main():
     arm_drone(controller)
     takeoff_drone(controller, altitude=7)
 
+    time.sleep(2)
     Odom_Pub_thread = threading.Thread(target=OdomThread_Func,args=(controller,),daemon=True)
     Odom_Pub_thread.start()
 
@@ -293,16 +313,26 @@ def OdomThread_Func(controller):
 
     """
 
+    gps_msg = controller.recv_match(type='GLOBAL_POSITION_INT', blocking=True)
+    if gps_msg:
+        current_lat = gps_msg.lat/1e7  
+        current_lon = gps_msg.lon/1e7
+        relative_alt = gps_msg.relative_alt/1000
+
+
     controller.mav.command_long_send(
-            controller.target_system,
-            controller.target_component,
-            mavutil.mavlink.MAV_CMD_DO_SET_HOME,
-            1,
-            0, 0, 0, 0,
-            1, 1, 1
-        )
-
-
+        controller.target_system,        
+        controller.target_component,
+        mavutil.mavlink.MAV_CMD_DO_SET_HOME,  
+        0,                               
+        1,                               
+        0,                               
+        0,                               
+        0,                               
+        current_lat,
+        current_lon,                     
+        relative_alt
+    )
     rclpy.init(args=None)
     cube_pilot_node = CubePilotOdometryNode(controller)
 

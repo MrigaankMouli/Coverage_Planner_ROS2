@@ -1,4 +1,5 @@
 [console_scripts]
+ArmCheck = Coverage_Planner.ArmDisarm:main
 Connect = Coverage_Planner.Connect:main
 Mission = Coverage_Planner.Mission:main
 Odometry = Coverage_Planner.OdometryPub:main
