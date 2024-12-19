@@ -17,7 +17,7 @@ def monitor_thread_func(controller):
             print("Mode set to POSHOLD. Checking Throttle Value...")
 
             rc_msg = controller.recv_match(type = "RC_CHANNELS",blocking = True)
-            if rc_msg and rc_msg.chan3_raw>1200:
+            if rc_msg and rc_msg.chan3_raw>1350:
                 print("Pilot taking over control. Exiting Script.")
                 os._exit(o)
             else:
