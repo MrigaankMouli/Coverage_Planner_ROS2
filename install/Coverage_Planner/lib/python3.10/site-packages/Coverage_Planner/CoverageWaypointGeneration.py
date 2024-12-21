@@ -3,75 +3,130 @@ import matplotlib.pyplot as plt
 from pyproj import Proj, Transformer
 import math
 import json
+import os
 
-def convert_angular_fov_to_linear(fov_degrees, altitude):
-    fov_radians = math.radians(fov_degrees)
-    half_fov_radians = fov_radians / 2
-    linear_fov = 2 * altitude * math.tan(half_fov_radians)
-    return linear_fov
+class Camera:
+    """
+    Class to define camera parameters and altitude settings for aerial photography.
+    
+        fov_x_deg (float): Horizontal field of view in degrees
+        fov_y_deg (float): Vertical field of view in degrees
+        altitude_feet (float): Flying altitude in feet
+        altitude_meters (float): Flying altitude converted to meters
+        fov_x_meters (float): Horizontal field of view converted to meters at specified altitude
+        fov_y_meters (float): Vertical field of view converted to meters at specified altitude
+    """
+    def __init__(self, fov_x_deg, fov_y_deg, altitude_feet):
+        self.fov_x_deg = fov_x_deg
+        self.fov_y_deg = fov_y_deg
+        self.altitude_feet = altitude_feet
+        self.altitude_meters = self.altitude_feet * 0.3048  
+        self.fov_x_meters = self.convert_angular_fov_to_linear(self.fov_x_deg)
+        self.fov_y_meters = self.convert_angular_fov_to_linear(self.fov_y_deg)
+
+    def convert_angular_fov_to_linear(self, fov_degrees):
+        """
+        Converts angular field of view to linear distance on the ground.
+        
+        """
+        fov_radians = math.radians(fov_degrees)
+        half_fov_radians = fov_radians / 2
+        return 2 * self.altitude_meters * math.tan(half_fov_radians)
 
 def utm_to_gps(utm_proj, utm_x, utm_y):
+    """
+    Converts UTM coordinates to GPS coordinates (latitude, longitude).
+    
+    """
     gps_proj = Proj(proj='latlong', datum='WGS84')
     transformer = Transformer.from_proj(utm_proj, gps_proj, always_xy=True)
     lon, lat = transformer.transform(utm_x, utm_y)
     return lat, lon
 
 def gps_to_utm(lon, lat):
+    """
+    Converts GPS coordinates (latitude, longitude) to UTM coordinates.
+    
+    """
     utm_proj = Proj(proj='utm', zone=18, ellps='WGS84')
     transformer = Transformer.from_proj(Proj(proj='latlong', datum='WGS84'), utm_proj, always_xy=True)
     utm_x, utm_y = transformer.transform(lon, lat)
     return utm_x, utm_y
 
-def generate_square_coverage_waypoints(lat, lon, square_side, camera_fov_x, camera_fov_y, camera_fov_x_deg, camera_fov_y_deg, combine_factor=2):
+def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_factor):
+    """
+    Generates a grid of waypoints to cover a square area using a lawnmower pattern.
+
+    """
     utm_proj = Proj(proj='utm', zone=18, ellps='WGS84')
     utm_x, utm_y = gps_to_utm(lon, lat)
-    
-    half_side = square_side / 2
-    x_grids = int(np.ceil(square_side / camera_fov_x))
-    y_grids = int(np.ceil(square_side / camera_fov_y))
-    
+
+    step_x = camera.fov_x_meters * combine_factor
+    step_y = camera.fov_y_meters 
+
+    x_grids = int(np.ceil(square_side / step_x))
+    y_grids = int(np.ceil(square_side / step_y))
+
     waypoints = []
-    for y in range(0, y_grids, combine_factor):
-        x_range = range(0, x_grids, combine_factor) if y % 2 == 0 else range(x_grids-1, -1, -combine_factor)
+
+    for y in range(y_grids):
+        x_range = range(x_grids) if y % 2 == 0 else range(x_grids - 1, -1, -1)
+        
         for x in x_range:
-            grid_x = (x - (x_grids-1)/2) * camera_fov_x
-            grid_y = (y - (y_grids-1)/2) * camera_fov_y
+            grid_x = (x - (x_grids - 1) / 2) * step_x
+            grid_y = (y - (y_grids - 1) / 2) * step_y
             abs_utm_x = utm_x + grid_x
             abs_utm_y = utm_y + grid_y
+            
             grid_lat, grid_lon = utm_to_gps(utm_proj, abs_utm_x, abs_utm_y)
             waypoints.append({
-                'latitude': int(grid_lat*1e7),
-                'longitude': int(grid_lon*1e7),
+                'latitude': (grid_lat),
+                'longitude': (grid_lon),
                 'utm_x': abs_utm_x,
                 'utm_y': abs_utm_y
             })
-    
+
+        if y < y_grids - 1:
+            transition_x = abs_utm_x
+            transition_y = utm_y + ((y + 1 - (y_grids - 1) / 2) * step_y)
+            transition_lat, transition_lon = utm_to_gps(utm_proj, transition_x, transition_y)
+            waypoints.append({
+                'latitude': (transition_lat),
+                'longitude': (transition_lon),
+                'utm_x': transition_x,
+                'utm_y': transition_y
+            })
+
     return {
         'center_point': {'latitude': lat, 'longitude': lon},
         'square_parameters': {
             'side_length': square_side,
-            'camera_fov_x': camera_fov_x,
-            'camera_fov_y': camera_fov_y,
-            'angular_fov_x': camera_fov_x_deg,
-            'angular_fov_y': camera_fov_y_deg
+            'camera_fov_x': camera.fov_x_meters,
+            'camera_fov_y': camera.fov_y_meters,
+            'angular_fov_x': camera.fov_x_deg,
+            'angular_fov_y': camera.fov_y_deg,
+            'combine_factor': combine_factor
         },
-        'waypoints': waypoints
+        'lap_waypoints': waypoints
     }
 
 def plot_square_coverage(coverage_data):
+    """
+    Plots the waypoint coverage pattern and square boundary.
+    
+    """
     center_utm_x, center_utm_y = gps_to_utm(
         coverage_data['center_point']['longitude'],
         coverage_data['center_point']['latitude']
     )
-    
-    waypoint_utm_x = [wp['utm_x'] for wp in coverage_data['waypoints']]
-    waypoint_utm_y = [wp['utm_y'] for wp in coverage_data['waypoints']]
-    
+
+    waypoint_utm_x = [wp['utm_x'] for wp in coverage_data['lap_waypoints']]
+    waypoint_utm_y = [wp['utm_y'] for wp in coverage_data['lap_waypoints']]
+
     plt.figure(figsize=(10, 10))
-    
+
     side = coverage_data['square_parameters']['side_length']
     half_side = side / 2
-    
     square_x = [
         center_utm_x - half_side,
         center_utm_x + half_side,
@@ -79,7 +134,6 @@ def plot_square_coverage(coverage_data):
         center_utm_x - half_side,
         center_utm_x - half_side
     ]
-    
     square_y = [
         center_utm_y - half_side,
         center_utm_y - half_side,
@@ -87,12 +141,12 @@ def plot_square_coverage(coverage_data):
         center_utm_y + half_side,
         center_utm_y - half_side
     ]
-    
+
     plt.plot(square_x, square_y, 'r--', label='Square Boundary')
     plt.plot(center_utm_x, center_utm_y, 'ro', label='Center Point')
     plt.plot(waypoint_utm_x, waypoint_utm_y, 'go', label='Waypoints')
     plt.plot(waypoint_utm_x, waypoint_utm_y, 'g-', alpha=0.5)
-    
+
     plt.title('Square Coverage Waypoints')
     plt.xlabel('UTM X (meters)')
     plt.ylabel('UTM Y (meters)')
@@ -101,30 +155,47 @@ def plot_square_coverage(coverage_data):
     plt.axis('equal')
     plt.show()
 
-def main():
-    latitude = -35.3614651
-    longitude = 149.1652373
-    square_side = 400
+params = {
+        'latitude': -35.3614651,
+        'longitude': 149.1652373,
+        'square_side': 400,
+        'camera_params': {
+            'fov_x_deg': 90,
+            'fov_y_deg': 65,
+            'altitude_feet': 22
+        },
+        'combine_factor': 3,
+        'output_file': 'coverage_waypoints.json'
+    }
+
+def main(latitude=params['latitude'], longitude=params['longitude'], square_side=params['square_side'], 
+         camera_params=params['camera_params'], combine_factor=params['combine_factor'], 
+         output_file=params['output_file']):
+    """
+    Main function to generate and plot waypoints for square coverage.
     
-    camera_fov_x_deg = 90  
-    camera_fov_y_deg = 65  
-    alt_feet = 22
-    
-    altitude = alt_feet * 0.3048
-    
-    camera_fov_x = convert_angular_fov_to_linear(camera_fov_x_deg, altitude)
-    camera_fov_y = convert_angular_fov_to_linear(camera_fov_y_deg, altitude)
-    
+        latitude (float): Center latitude in decimal degrees
+        longitude (float): Center longitude in decimal degrees
+        square_side (float): Length of square side in meters
+        camera_params (dict): Camera parameters including FOV and altitude
+        combine_factor (float): Overlap factor for camera coverage
+        output_file (str): Filename for saving waypoint data
+    """
+    camera = Camera(**camera_params)
+
     coverage_data = generate_square_coverage_waypoints(
-        latitude, longitude, square_side, camera_fov_x, camera_fov_y, camera_fov_x_deg, camera_fov_y_deg, combine_factor=2
+        latitude, longitude, square_side, camera, combine_factor
     )
-    
+
     plot_square_coverage(coverage_data)
 
     print(f"No. of Waypoints : {len(coverage_data['waypoints'])}")
-    
-    with open('coverage_waypoints.json', 'w') as f:
+
+    waypoints_dir = os.path.join(os.path.dirname(__file__), '..', 'Waypoints')
+    os.makedirs(waypoints_dir, exist_ok=True)
+
+    waypoints_file = os.path.join(waypoints_dir, 'coverage_waypoints.json')
+    with open(waypoints_file, 'w') as f:
         json.dump(coverage_data, f, indent=4)
 
-if __name__ == "__main__":
-    main()
+

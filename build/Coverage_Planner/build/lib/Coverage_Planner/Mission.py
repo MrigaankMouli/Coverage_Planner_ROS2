@@ -7,7 +7,9 @@ from pymavlink import mavutil
 import time
 import threading
 from ament_index_python.packages import get_package_share_directory
-from tf_transformations import quaternion_from_euler
+from scipy.spatial.transform import Rotation as R
+import os
+import json
 
 def monitor_thread_func(controller):
     """
@@ -255,15 +257,20 @@ def start_mission(controller):
         0, 0, 0, 0, 0, 0, 0, 0
     )
 
-SERIAL_PORT_CUBEPILOT = "/dev/ttyACM0"
+# SERIAL_PORT_CUBEPILOT = "/dev/ttyACM0"
+
+from rclpy.node import Node
+from sensor_msgs.msg import NavSatFix, Imu
+from nav_msgs.msg import Odometry
+from geometry_msgs.msg import Point, Vector3
+from scipy.spatial.transform import Rotation as R
 
 class CubePilotOdometryNode(Node):
     """
-    Node to Publish the Odometry, IMU and GPS data from the GPS and the CubeOrange IMU as ROS2 messages
-
+    Node to Publish the Odometry, IMU, and GPS data from the GPS and the CubeOrange IMU as ROS2 messages.
     """
 
-    def __init__(self,controller):
+    def __init__(self, controller):
         super().__init__('cube_pilot_odom_publisher')
         self.odom_pub = self.create_publisher(Odometry, '/odom_cube', 10)
         self.gps_pub = self.create_publisher(NavSatFix, '/gps_cube', 10)
@@ -279,56 +286,60 @@ class CubePilotOdometryNode(Node):
             self.CubePilot.target_system,
             self.CubePilot.target_component,
             mavutil.mavlink.MAV_DATA_STREAM_ALL,  
-            10,  
+            30,  
             1
-        )
+            )
+
         msg = self.CubePilot.recv_match(type='LOCAL_POSITION_NED', blocking=False)
         msg1 = self.CubePilot.recv_match(type='ATTITUDE', blocking=False)
         
         if msg:
             odom = Odometry()
             odom.header.stamp = self.get_clock().now().to_msg()
-            odom.header.frame_id = 'odom'
+            odom.header.frame_id = 'odom_frame'
             odom.pose.pose.position = Point(x=msg.x, y=msg.y, z=msg.z)
-            odom.twist.twist.linear = Vector3()
-            odom.twist.twist.linear.x = msg.vx
-            odom.twist.twist.linear.y = msg.vy
-            odom.twist.twist.linear.z = msg.vz
+            odom.twist.twist.linear = Vector3(
+                x=msg.vx,
+                y=msg.vy,
+                z=msg.vz
+            )
             
             if msg1:
-                odom.twist.twist.angular = Vector3()
-                odom.twist.twist.angular.x = msg1.roll
-                odom.twist.twist.angular.y = msg1.pitch
-                odom.twist.twist.angular.z = msg1.yaw
+                odom.twist.twist.angular = Vector3(
+                    x=msg1.roll,
+                    y=msg1.pitch,
+                    z=msg1.yaw
+                )
             else:
                 self.get_logger().warn("ATTITUDE message not available, skipping angular velocities.")
             
             self.odom_pub.publish(odom)
-            self.get_logger().info(f"Position (NED): X: {msg.x}, Y: {msg.y}, Z: {msg.z}")
-            self.get_logger().info(f"Velocity: Vx: {msg.vx}, Vy: {msg.vy}, Vz: {msg.vz}")
-    
+            self.get_logger().info(f"Published Odometry: X={msg.x}, Y={msg.y}, Z={msg.z}, Vx={msg.vx}, Vy={msg.vy}, Vz={msg.vz}")
+        else:
+            self.get_logger().warn("LOCAL_POSITION_NED message not available, skipping odometry.")
+
         msg2 = self.CubePilot.recv_match(type="GPS_RAW_INT", blocking=False)
         
         if msg2:
             gps_msg = NavSatFix()
             gps_msg.header.stamp = self.get_clock().now().to_msg()
-            gps_msg.header.frame_id = 'gps'
+            gps_msg.header.frame_id = 'gps_link'
             gps_msg.latitude = msg2.lat / 1e7
             gps_msg.longitude = msg2.lon / 1e7
-            gps_msg.altitude = msg2.alt / 1000
-            gps_msg.status.status = msg2.fix_type   
-
+            gps_msg.altitude = msg2.alt / 1000.0
+            gps_msg.status.status = msg2.fix_type
+            
             self.gps_pub.publish(gps_msg)
             self.get_logger().info(f"Published GPS data: Latitude={gps_msg.latitude}, Longitude={gps_msg.longitude}, Altitude={gps_msg.altitude}")
         else:
-            self.get_logger().warn("GPS Message not available, skipping GPS coordinates ")    
+            self.get_logger().warn("GPS_RAW_INT message not available, skipping GPS coordinates.")
 
-        msg3 = self.CubePilot.recv_match(type='SCALED_IMU2',blocking=False)
+        msg3 = self.CubePilot.recv_match(type='SCALED_IMU2', blocking=False)
 
         if msg3:
             imu_msg = Imu()
             imu_msg.header.stamp = self.get_clock().now().to_msg()
-            imu_msg.header.frame_id ='imu'
+            imu_msg.header.frame_id = 'imu_link'
             imu_msg.linear_acceleration.x = float(msg3.xacc)
             imu_msg.linear_acceleration.y = float(msg3.yacc)
             imu_msg.linear_acceleration.z = float(msg3.zacc)
@@ -337,18 +348,24 @@ class CubePilotOdometryNode(Node):
             imu_msg.angular_velocity.y = float(msg3.ygyro)
             imu_msg.angular_velocity.z = float(msg3.zgyro)
 
-            r = R.from_euler('xyz', [msg1.roll, msg1.pitch, msg1.yaw], degrees=False)
-            quaternion = r.as_quat()
-
-            imu_msg.orientation.x = quaternion[0]
-            imu_msg.orientation.y = quaternion[1]
-            imu_msg.orientation.z = quaternion[2]
-            imu_msg.orientation.w = quaternion[3]
+            if msg1:
+                r = R.from_euler('xyz', [msg1.roll, msg1.pitch, msg1.yaw], degrees=False)
+                quaternion = r.as_quat()
+                imu_msg.orientation.x = quaternion[0]
+                imu_msg.orientation.y = quaternion[1]
+                imu_msg.orientation.z = quaternion[2]
+                imu_msg.orientation.w = quaternion[3]
+            else:
+                imu_msg.orientation.x = 0.0
+                imu_msg.orientation.y = 0.0
+                imu_msg.orientation.z = 0.0
+                imu_msg.orientation.w = 1.0
+                self.get_logger().warn("ATTITUDE message not available, setting default quaternion.")
             
             self.imu_pub.publish(imu_msg)
-            self.get_logger().info("Published IMU data with quaternion.")
+            self.get_logger().info("Published IMU data with orientation quaternion.")
         else:
-            self.get_logger().warn("IMU Message not Availible.")
+            self.get_logger().warn("SCALED_IMU2 message not available, skipping IMU data.")
 
 
 def PubThread_Func(controller):
@@ -356,6 +373,21 @@ def PubThread_Func(controller):
     Thread to start the Odometry, IMU and GPS data Publisher
 
     """
+    rclpy.init(args=None)
+    cube_pilot_node = CubePilotOdometryNode(controller)
+
+    rclpy.spin(cube_pilot_node)
+
+
+def main(args=None):
+
+    print("Initializing connection...")
+    controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
+    controller.wait_heartbeat()
+    print("Connection established.")
+    
+    monitor_thread = threading.Thread(target=monitor_thread_func,args=(controller,),daemon=True)
+    monitor_thread.start()
 
     gps_msg = controller.recv_match(type='GLOBAL_POSITION_INT', blocking=True)
     if gps_msg:
@@ -377,21 +409,6 @@ def PubThread_Func(controller):
         current_lon,                     
         relative_alt
     )
-    rclpy.init(args=None)
-    cube_pilot_node = CubePilotOdometryNode(controller)
-
-    rclpy.spin(cube_pilot_node)
-
-
-def main(args=None):
-
-    print("Initializing connection...")
-    controller = mavutil.mavlink_connection("/dev/ttyACM0")
-    controller.wait_heartbeat()
-    print("Connection established.")
-    
-    monitor_thread = threading.Thread(target=monitor_thread_func,args=(controller,),daemon=True)
-    monitor_thread.start()
 
 
     print("Setting Mode to Guided")
@@ -400,7 +417,7 @@ def main(args=None):
 
     home_pos = load_home_position(controller)
     package_share_dir = get_package_share_directory("Coverage_Planner")
-    lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/Test Mission(I'm scared af).json")
+    lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/coverage_waypoints.json")
     upload_mission(controller, home_pos, lap_waypoints,altitude=7)
     arm_drone(controller)
     takeoff_drone(controller,altitude=7)

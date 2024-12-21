@@ -53,7 +53,7 @@ def gps_to_utm(lon, lat):
     utm_x, utm_y = transformer.transform(lon, lat)
     return utm_x, utm_y
 
-def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_factor=2.5):
+def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_factor):
     """
     Generates a grid of waypoints to cover a square area using a lawnmower pattern.
 
@@ -62,7 +62,7 @@ def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_fa
     utm_x, utm_y = gps_to_utm(lon, lat)
 
     step_x = camera.fov_x_meters * combine_factor
-    step_y = camera.fov_y_meters * combine_factor
+    step_y = camera.fov_y_meters 
 
     x_grids = int(np.ceil(square_side / step_x))
     y_grids = int(np.ceil(square_side / step_y))
@@ -80,8 +80,8 @@ def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_fa
             
             grid_lat, grid_lon = utm_to_gps(utm_proj, abs_utm_x, abs_utm_y)
             waypoints.append({
-                'latitude': int(grid_lat * 1e7),
-                'longitude': int(grid_lon * 1e7),
+                'latitude': (grid_lat),
+                'longitude': (grid_lon),
                 'utm_x': abs_utm_x,
                 'utm_y': abs_utm_y
             })
@@ -91,8 +91,8 @@ def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_fa
             transition_y = utm_y + ((y + 1 - (y_grids - 1) / 2) * step_y)
             transition_lat, transition_lon = utm_to_gps(utm_proj, transition_x, transition_y)
             waypoints.append({
-                'latitude': int(transition_lat * 1e7),
-                'longitude': int(transition_lon * 1e7),
+                'latitude': (transition_lat),
+                'longitude': (transition_lon),
                 'utm_x': transition_x,
                 'utm_y': transition_y
             })
@@ -107,7 +107,7 @@ def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_fa
             'angular_fov_y': camera.fov_y_deg,
             'combine_factor': combine_factor
         },
-        'waypoints': waypoints
+        'lap_waypoints': waypoints
     }
 
 def plot_square_coverage(coverage_data):
@@ -120,8 +120,8 @@ def plot_square_coverage(coverage_data):
         coverage_data['center_point']['latitude']
     )
 
-    waypoint_utm_x = [wp['utm_x'] for wp in coverage_data['waypoints']]
-    waypoint_utm_y = [wp['utm_y'] for wp in coverage_data['waypoints']]
+    waypoint_utm_x = [wp['utm_x'] for wp in coverage_data['lap_waypoints']]
+    waypoint_utm_y = [wp['utm_y'] for wp in coverage_data['lap_waypoints']]
 
     plt.figure(figsize=(10, 10))
 
@@ -155,7 +155,22 @@ def plot_square_coverage(coverage_data):
     plt.axis('equal')
     plt.show()
 
-def main(latitude, longitude, square_side, camera_params, combine_factor, output_file):
+params = {
+        'latitude': -35.3614651,
+        'longitude': 149.1652373,
+        'square_side': 400,
+        'camera_params': {
+            'fov_x_deg': 90,
+            'fov_y_deg': 65,
+            'altitude_feet': 22
+        },
+        'combine_factor': 3,
+        'output_file': 'coverage_waypoints.json'
+    }
+
+def main(latitude=params['latitude'], longitude=params['longitude'], square_side=params['square_side'], 
+         camera_params=params['camera_params'], combine_factor=params['combine_factor'], 
+         output_file=params['output_file']):
     """
     Main function to generate and plot waypoints for square coverage.
     
@@ -183,25 +198,4 @@ def main(latitude, longitude, square_side, camera_params, combine_factor, output
     with open(waypoints_file, 'w') as f:
         json.dump(coverage_data, f, indent=4)
 
-if __name__ == "__main__":
-    params = {
-        'latitude': -35.3614651,
-        'longitude': 149.1652373,
-        'square_side': 400,
-        'camera_params': {
-            'fov_x_deg': 90,
-            'fov_y_deg': 65,
-            'altitude_feet': 22
-        },
-        'combine_factor': 2.5,
-        'output_file': 'coverage_waypoints.json'
-    }
 
-    main(
-        latitude=params['latitude'],
-        longitude=params['longitude'],
-        square_side=params['square_side'],
-        camera_params=params['camera_params'],
-        combine_factor=params['combine_factor'],
-        output_file=params['output_file']
-    )
