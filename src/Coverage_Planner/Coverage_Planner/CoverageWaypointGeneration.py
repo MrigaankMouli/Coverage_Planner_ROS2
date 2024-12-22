@@ -57,7 +57,7 @@ def gps_to_utm(lon, lat):
 
 def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_factor):
     """
-    Generates a grid of waypoints to cover a square area using a lawnmower pattern.
+    Generates a grid of waypoints to cover a square area using a Boustrophedon pattern.
 
     """
     utm_proj = Proj(proj='utm', zone=18, ellps='WGS84')
