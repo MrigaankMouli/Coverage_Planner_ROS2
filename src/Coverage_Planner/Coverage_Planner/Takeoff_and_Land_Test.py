@@ -19,7 +19,7 @@ def monitor_thread_func(controller):
             rc_msg = controller.recv_match(type = "RC_CHANNELS",blocking = True)
             if rc_msg and rc_msg.chan3_raw>1350:
                 print("Pilot taking over control. Exiting Script.")
-                os._exit(o)
+                os._exit(0)
             else:
                 print("Throttle value too low. Control remains with the script")
 
