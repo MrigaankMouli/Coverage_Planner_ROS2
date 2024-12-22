@@ -85,7 +85,7 @@ class MissionItem:
         self.auto = 1 #AutoContinue to next WP(0 for false, 1 for true)
         self.param1 = 0.0 #Hold Time in Seconds
         self.param2 = 0.5 #Acceptance Radius in Metres
-        self.param3 = 1.0 #Pass Radius(1 to Loiter at the WP for duration specified in Param1 and 0 to Pass through the WP)
+        self.param3 = 0.0 #Pass Radius(1 to Loiter at the WP for duration specified in Param1 and 0 to Pass through the WP)
         self.param4 = 0.0 #Desired Yaw Angle at the WP
         self.x = int(x) #Latitude in Lat*1e7 format
         self.y = int(y) #Longitude in Lon*1e7 format

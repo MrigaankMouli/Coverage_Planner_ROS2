@@ -4,6 +4,8 @@ from pyproj import Proj, Transformer
 import math
 import json
 import os
+from ament_index_python.packages import get_package_share_directory
+
 
 class Camera:
     """
@@ -164,7 +166,7 @@ params = {
             'fov_y_deg': 65,
             'altitude_feet': 22
         },
-        'combine_factor': 3,
+        'combine_factor': 4,
         'output_file': 'coverage_waypoints.json'
     }
 
@@ -191,10 +193,10 @@ def main(latitude=params['latitude'], longitude=params['longitude'], square_side
 
     plot_square_coverage(coverage_data)
 
-    waypoints_dir = os.path.join(os.path.dirname(__file__), '..', 'Waypoints')
-    os.makedirs(waypoints_dir, exist_ok=True)
+    package_share_dir = get_package_share_directory("Coverage_Planner")
+    waypoints_file = os.path.join(package_share_dir, 'Waypoints', 'coverage_waypoints.json')
+    os.makedirs(os.path.dirname(waypoints_file), exist_ok=True)
 
-    waypoints_file = os.path.join(waypoints_dir, 'coverage_waypoints.json')
     with open(waypoints_file, 'w') as f:
         json.dump(coverage_data, f, indent=4)
 
