@@ -11,6 +11,40 @@ from scipy.spatial.transform import Rotation as R
 import os
 import json
 
+
+class MissionTimer:
+    def __init__(self):
+        self.start_time = None
+        self.is_running = False
+        self.elapsed_time = 0
+
+    def start(self):
+        self.start_time = time.time()
+        self.is_running = True
+
+    def stop(self):
+        if self.is_running:
+            self.elapsed_time = time.time() - self.start_time
+            self.is_running = False
+
+    def get_elapsed_time(self):
+        if self.is_running:
+            return time.time() - self.start_time
+        return self.elapsed_time
+
+def timer_thread_func(mission_timer):
+    """
+    Thread that continuously updates and displays mission time
+    """
+    print("Timer Thread Running")
+    while True:
+        if mission_timer.is_running:
+            elapsed = mission_timer.get_elapsed_time()
+            minutes = int(elapsed // 60)
+            seconds = int(elapsed % 60)
+            print(f"\rMission Time: {minutes:02d}:{seconds:02d}", end="", flush=True)
+        time.sleep(1)
+
 def monitor_thread_func(controller):
     """
     Monitor Thread that gives control to Safety Pilot by killing the script
@@ -49,8 +83,8 @@ class MissionItem:
         self.command = mavutil.mavlink.MAV_CMD_NAV_WAYPOINT
         self.current = current
         self.auto = 1 #AutoContinue to next WP(0 for false, 1 for true)
-        self.param1 = 3.0 #Hold Time in Seconds
-        self.param2 = 0.04 #Acceptance Radius in Metres
+        self.param1 = 0.0 #Hold Time in Seconds
+        self.param2 = 0.5 #Acceptance Radius in Metres
         self.param3 = 1.0 #Pass Radius(1 to Loiter at the WP for duration specified in Param1 and 0 to Pass through the WP)
         self.param4 = 0.0 #Desired Yaw Angle at the WP
         self.x = int(x) #Latitude in Lat*1e7 format
@@ -301,7 +335,7 @@ class CubePilotOdometryNode(Node):
             odom.twist.twist.linear = Vector3(
                 x=msg.vx,
                 y=msg.vy,
-                z=msg.vz
+                z=-1*msg.vz
             )
             
             if msg1:
@@ -334,7 +368,8 @@ class CubePilotOdometryNode(Node):
         else:
             self.get_logger().warn("GPS_RAW_INT message not available, skipping GPS coordinates.")
 
-        msg3 = self.CubePilot.recv_match(type='SCALED_IMU2', blocking=False)
+        msg3 = self.CubePilot.recv_match(type='RAW_IMU', blocking=False)
+        print(msg3)
 
         if msg3:
             imu_msg = Imu()
@@ -355,12 +390,11 @@ class CubePilotOdometryNode(Node):
                 imu_msg.orientation.y = quaternion[1]
                 imu_msg.orientation.z = quaternion[2]
                 imu_msg.orientation.w = quaternion[3]
-            else:
-                imu_msg.orientation.x = 0.0
-                imu_msg.orientation.y = 0.0
-                imu_msg.orientation.z = 0.0
-                imu_msg.orientation.w = 1.0
-                self.get_logger().warn("ATTITUDE message not available, setting default quaternion.")
+            # else:
+            #     imu_msg.orientation.x = 0.0
+            #     imu_msg.orientation.y = 0.0
+            #     imu_msg.orientation.z = 0.0
+            #     imu_msg.orientation.w = 1.0
             
             self.imu_pub.publish(imu_msg)
             self.get_logger().info("Published IMU data with orientation quaternion.")
@@ -380,21 +414,24 @@ def PubThread_Func(controller):
 
 
 def main(args=None):
-
     print("Initializing connection...")
     controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
     controller.wait_heartbeat()
     print("Connection established.")
     
-    monitor_thread = threading.Thread(target=monitor_thread_func,args=(controller,),daemon=True)
+    mission_timer = MissionTimer()
+    
+    monitor_thread = threading.Thread(target=monitor_thread_func, args=(controller,), daemon=True)
     monitor_thread.start()
+
+    timer_thread = threading.Thread(target=timer_thread_func, args=(mission_timer,), daemon=True)
+    timer_thread.start()
 
     gps_msg = controller.recv_match(type='GLOBAL_POSITION_INT', blocking=True)
     if gps_msg:
         current_lat = gps_msg.lat/1e7  
         current_lon = gps_msg.lon/1e7
         relative_alt = gps_msg.relative_alt/1000
-
 
     controller.mav.command_long_send(
         controller.target_system,        
@@ -410,28 +447,53 @@ def main(args=None):
         relative_alt
     )
 
-
     print("Setting Mode to Guided")
-    set_mode(controller,mode=4)
+    set_mode(controller, mode=4)
     time.sleep(1)
 
     home_pos = load_home_position(controller)
     package_share_dir = get_package_share_directory("Coverage_Planner")
     lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/coverage_waypoints.json")
-    upload_mission(controller, home_pos, lap_waypoints,altitude=7)
+    upload_mission(controller, home_pos, lap_waypoints, altitude=7)
     arm_drone(controller)
-    takeoff_drone(controller,altitude=7)
+    takeoff_drone(controller, altitude=7)
     time.sleep(8)
 
-    publisher_thread = threading.Thread(target=PubThread_Func,args=(controller,),daemon=True)
+    publisher_thread = threading.Thread(target=PubThread_Func, args=(controller,), daemon=True)
     publisher_thread.start()
     
-    set_mode(controller,mode=3)
+    set_mode(controller, mode=3)
     time.sleep(2)
+    
+    mission_timer.start()
+    print("\nMission started! Timer running...")
     start_mission(controller)
 
-    time.sleep(2000)
+    try:
+        while True:
+            msg = controller.recv_match(type='MISSION_CURRENT', blocking=True, timeout=1)
+            if msg and msg.seq == len(lap_waypoints) + 1:  
+                mission_timer.stop()
+                final_time = mission_timer.get_elapsed_time()
+                minutes = int(final_time // 60)
+                seconds = int(final_time % 60)
+                print(f"\nMission Complete! Total time: {minutes:02d}:{seconds:02d}")
+                break
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        mission_timer.stop()
+        print("\nMission interrupted by user")
+        final_time = mission_timer.get_elapsed_time()
+        minutes = int(final_time // 60)
+        seconds = int(final_time % 60)
+        print(f"Final time before interruption: {minutes:02d}:{seconds:02d}")
+    except Exception as e:
+        mission_timer.stop()
+        print(f"\nMission terminated due to error: {str(e)}")
+        final_time = mission_timer.get_elapsed_time()
+        minutes = int(final_time // 60)
+        seconds = int(final_time % 60)
+        print(f"Final time before error: {minutes:02d}:{seconds:02d}")
 
-    
 if __name__ == "__main__":
     main()

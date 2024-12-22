@@ -1,7 +1,7 @@
 from pymavlink import mavutil
 import rclpy
 
-SERIAL_PORT_CUBEPILOT = "/dev/ttyACM0"
+SERIAL_PORT_CUBEPILOT = "udpin:127.0.0.1:14550"
 
 def main():
     print(f"Attempting to Connect with CubePilot on {SERIAL_PORT_CUBEPILOT}")

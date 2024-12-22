@@ -187,9 +187,9 @@ def main(latitude=params['latitude'], longitude=params['longitude'], square_side
         latitude, longitude, square_side, camera, combine_factor
     )
 
-    plot_square_coverage(coverage_data)
+    print(f"No. of Waypoints : {len(coverage_data['lap_waypoints'])}")
 
-    print(f"No. of Waypoints : {len(coverage_data['waypoints'])}")
+    plot_square_coverage(coverage_data)
 
     waypoints_dir = os.path.join(os.path.dirname(__file__), '..', 'Waypoints')
     os.makedirs(waypoints_dir, exist_ok=True)
