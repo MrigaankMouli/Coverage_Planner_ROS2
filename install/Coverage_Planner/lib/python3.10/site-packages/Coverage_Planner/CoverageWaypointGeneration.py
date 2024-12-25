@@ -160,13 +160,13 @@ def plot_square_coverage(coverage_data):
 params = {
         'latitude': -35.3614651,
         'longitude': 149.1652373,
-        'square_side': 400,
+        'square_side': 200,
         'camera_params': {
             'fov_x_deg': 90,
             'fov_y_deg': 65,
             'altitude_feet': 22
         },
-        'combine_factor': 4,
+        'combine_factor': 2,
         'output_file': 'coverage_waypoints.json'
     }
 

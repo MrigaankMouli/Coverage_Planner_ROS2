@@ -12,39 +12,6 @@ import os
 import json
 
 
-class MissionTimer:
-    def __init__(self):
-        self.start_time = None
-        self.is_running = False
-        self.elapsed_time = 0
-
-    def start(self):
-        self.start_time = time.time()
-        self.is_running = True
-
-    def stop(self):
-        if self.is_running:
-            self.elapsed_time = time.time() - self.start_time
-            self.is_running = False
-
-    def get_elapsed_time(self):
-        if self.is_running:
-            return time.time() - self.start_time
-        return self.elapsed_time
-
-def timer_thread_func(mission_timer):
-    """
-    Thread that continuously updates and displays mission time
-    """
-    print("Timer Thread Running")
-    while True:
-        if mission_timer.is_running:
-            elapsed = mission_timer.get_elapsed_time()
-            minutes = int(elapsed // 60)
-            seconds = int(elapsed % 60)
-            print(f"\rMission Time: {minutes:02d}:{seconds:02d}", end="", flush=True)
-        time.sleep(1)
-
 def monitor_thread_func(controller):
     """
     Monitor Thread that gives control to Safety Pilot by killing the script
@@ -225,6 +192,35 @@ def upload_mission(controller, home_pos, vertices, altitude):
         time.sleep(0.001)
         print(f"Mission item {item.seq} uploaded.")
 
+def get_mission_count(controller):
+    """
+    Returns the Mission Count
+
+    """
+    controller.mav.mission_request_list_send(controller.target_system, controller.target_component)
+    msg = controller.recv_match(type='MISSION_COUNT', blocking=True)
+    return msg.count
+
+def monitor_mission(controller):
+    """
+    Monitors the Mission Progress
+
+    """
+    mission_count = get_mission_count(controller)
+    print(f"Total waypoints: {mission_count}")
+
+    while True:
+        msg = controller.recv_match(type='MISSION_CURRENT', blocking=True, timeout=1)
+        if msg is not None:
+            current_wp = msg.seq
+            print(f"Current waypoint: {current_wp}")
+
+            if current_wp >= mission_count:
+                print("Mission complete!")
+                break
+
+        time.sleep(1)
+
 def arm_drone(controller):
     """
     Arming the Drone
@@ -291,13 +287,6 @@ def start_mission(controller):
         0, 0, 0, 0, 0, 0, 0, 0
     )
 
-# SERIAL_PORT_CUBEPILOT = "/dev/ttyACM0"
-
-from rclpy.node import Node
-from sensor_msgs.msg import NavSatFix, Imu
-from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Point, Vector3
-from scipy.spatial.transform import Rotation as R
 
 class CubePilotOdometryNode(Node):
     """
@@ -312,48 +301,58 @@ class CubePilotOdometryNode(Node):
         
         self.CubePilot = controller
 
-        self.timer = self.create_timer(0.5, self.publish_odom)
-        
-    def publish_odom(self):
-
         self.CubePilot.mav.request_data_stream_send(
             self.CubePilot.target_system,
             self.CubePilot.target_component,
             mavutil.mavlink.MAV_DATA_STREAM_ALL,  
-            30,  
+            4,  
             1
-            )
+        )
+
+        self.timer = self.create_timer(0.25, self.publish_odom)
+
+    def publish_odom(self):
 
         msg = self.CubePilot.recv_match(type='LOCAL_POSITION_NED', blocking=False)
         msg1 = self.CubePilot.recv_match(type='ATTITUDE', blocking=False)
-        
-        if msg:
+
+        if msg and msg1:
             odom = Odometry()
             odom.header.stamp = self.get_clock().now().to_msg()
             odom.header.frame_id = 'odom_frame'
-            odom.pose.pose.position = Point(x=msg.x, y=msg.y, z=msg.z)
-            odom.twist.twist.linear = Vector3(
-                x=msg.vx,
-                y=msg.vy,
-                z=-1*msg.vz
-            )
-            
-            if msg1:
-                odom.twist.twist.angular = Vector3(
-                    x=msg1.roll,
-                    y=msg1.pitch,
-                    z=msg1.yaw
-                )
-            else:
-                self.get_logger().warn("ATTITUDE message not available, skipping angular velocities.")
-            
-            self.odom_pub.publish(odom)
-            self.get_logger().info(f"Published Odometry: X={msg.x}, Y={msg.y}, Z={msg.z}, Vx={msg.vx}, Vy={msg.vy}, Vz={msg.vz}")
-        else:
-            self.get_logger().warn("LOCAL_POSITION_NED message not available, skipping odometry.")
+            odom.child_frame_id = 'base_link'
 
-        msg2 = self.CubePilot.recv_match(type="GPS_RAW_INT", blocking=False)
-        
+            odom.pose.pose.position = Point(
+                x=msg.y, 
+                y=msg.x, 
+                z=-msg.z
+            )
+
+            r = R.from_euler('zyx', [msg1.yaw, msg1.pitch, msg1.roll], degrees=False)
+            quaternion = r.as_quat()
+            odom.pose.pose.orientation.x = quaternion[0]
+            odom.pose.pose.orientation.y = quaternion[1]
+            odom.pose.pose.orientation.z = quaternion[2]
+            odom.pose.pose.orientation.w = quaternion[3]
+
+            odom.twist.twist.linear = Vector3(
+                x=msg.vy, 
+                y=msg.vx, 
+                z=-msg.vz
+            )
+            odom.twist.twist.angular = Vector3(
+                x=msg1.rollspeed, 
+                y=msg1.pitchspeed, 
+                z=msg1.yawspeed
+            )
+
+            self.odom_pub.publish(odom)
+            self.get_logger().info(f"Published Odometry: X={msg.x}, Y={msg.y}, Z={msg.z}")
+        else:
+            self.get_logger().warn("LOCAL_POSITION_NED or ATTITUDE message not available.")
+
+
+        msg2 = self.CubePilot.recv_match(type='GPS_RAW_INT', blocking=False)
         if msg2:
             gps_msg = NavSatFix()
             gps_msg.header.stamp = self.get_clock().now().to_msg()
@@ -362,45 +361,34 @@ class CubePilotOdometryNode(Node):
             gps_msg.longitude = msg2.lon / 1e7
             gps_msg.altitude = msg2.alt / 1000.0
             gps_msg.status.status = msg2.fix_type
-            
             self.gps_pub.publish(gps_msg)
-            self.get_logger().info(f"Published GPS data: Latitude={gps_msg.latitude}, Longitude={gps_msg.longitude}, Altitude={gps_msg.altitude}")
+            self.get_logger().info(f"Published GPS: Latitude={gps_msg.latitude}, Longitude={gps_msg.longitude}, Altitude={gps_msg.altitude}")
         else:
-            self.get_logger().warn("GPS_RAW_INT message not available, skipping GPS coordinates.")
+            self.get_logger().warn("GPS_RAW_INT message not available.")
 
-        msg3 = self.CubePilot.recv_match(type='RAW_IMU', blocking=False)
-        print(msg3)
-
-        if msg3:
+        msg3 = self.CubePilot.recv_match(type='SCALED_IMU2', blocking=False)
+        if msg3 and msg1:
             imu_msg = Imu()
             imu_msg.header.stamp = self.get_clock().now().to_msg()
             imu_msg.header.frame_id = 'imu_link'
-            imu_msg.linear_acceleration.x = float(msg3.xacc)
-            imu_msg.linear_acceleration.y = float(msg3.yacc)
-            imu_msg.linear_acceleration.z = float(msg3.zacc)
+            imu_msg.linear_acceleration.x = msg3.xacc * 0.00980665  # Convert mG to m/s^2
+            imu_msg.linear_acceleration.y = msg3.yacc * 0.00980665
+            imu_msg.linear_acceleration.z = msg3.zacc * 0.00980665
+            imu_msg.angular_velocity.x = msg3.xgyro / 1000
+            imu_msg.angular_velocity.y = msg3.ygyro / 1000
+            imu_msg.angular_velocity.z = msg3.zgyro / 1000
 
-            imu_msg.angular_velocity.x = float(msg3.xgyro)
-            imu_msg.angular_velocity.y = float(msg3.ygyro)
-            imu_msg.angular_velocity.z = float(msg3.zgyro)
+            r = R.from_euler('zyx', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
+            quaternion = r.as_quat()
+            imu_msg.orientation.x = quaternion[0]
+            imu_msg.orientation.y = quaternion[1]
+            imu_msg.orientation.z = quaternion[2]
+            imu_msg.orientation.w = quaternion[3]
 
-            if msg1:
-                r = R.from_euler('xyz', [msg1.roll, msg1.pitch, msg1.yaw], degrees=False)
-                quaternion = r.as_quat()
-                imu_msg.orientation.x = quaternion[0]
-                imu_msg.orientation.y = quaternion[1]
-                imu_msg.orientation.z = quaternion[2]
-                imu_msg.orientation.w = quaternion[3]
-            # else:
-            #     imu_msg.orientation.x = 0.0
-            #     imu_msg.orientation.y = 0.0
-            #     imu_msg.orientation.z = 0.0
-            #     imu_msg.orientation.w = 1.0
-            
             self.imu_pub.publish(imu_msg)
-            self.get_logger().info("Published IMU data with orientation quaternion.")
+            self.get_logger().info("Published IMU data.")
         else:
-            self.get_logger().warn("SCALED_IMU2 message not available, skipping IMU data.")
-
+            self.get_logger().warn("SCALED_IMU2 or ATTITUDE message not available.")
 
 def PubThread_Func(controller):
     """
@@ -419,20 +407,14 @@ def main(args=None):
     controller.wait_heartbeat()
     print("Connection established.")
     
-    mission_timer = MissionTimer()
-    
     monitor_thread = threading.Thread(target=monitor_thread_func, args=(controller,), daemon=True)
     monitor_thread.start()
-
-    timer_thread = threading.Thread(target=timer_thread_func, args=(mission_timer,), daemon=True)
-    timer_thread.start()
 
     gps_msg = controller.recv_match(type='GLOBAL_POSITION_INT', blocking=True)
     if gps_msg:
         current_lat = gps_msg.lat/1e7  
         current_lon = gps_msg.lon/1e7
         relative_alt = gps_msg.relative_alt/1000
-
     controller.mav.command_long_send(
         controller.target_system,        
         controller.target_component,
@@ -465,35 +447,5 @@ def main(args=None):
     set_mode(controller, mode=3)
     time.sleep(2)
     
-    mission_timer.start()
-    print("\nMission started! Timer running...")
     start_mission(controller)
-
-    try:
-        while True:
-            msg = controller.recv_match(type='MISSION_CURRENT', blocking=True, timeout=1)
-            if msg and msg.seq == len(lap_waypoints) + 1:  
-                mission_timer.stop()
-                final_time = mission_timer.get_elapsed_time()
-                minutes = int(final_time // 60)
-                seconds = int(final_time % 60)
-                print(f"\nMission Complete! Total time: {minutes:02d}:{seconds:02d}")
-                break
-            time.sleep(0.1)
-    except KeyboardInterrupt:
-        mission_timer.stop()
-        print("\nMission interrupted by user")
-        final_time = mission_timer.get_elapsed_time()
-        minutes = int(final_time // 60)
-        seconds = int(final_time % 60)
-        print(f"Final time before interruption: {minutes:02d}:{seconds:02d}")
-    except Exception as e:
-        mission_timer.stop()
-        print(f"\nMission terminated due to error: {str(e)}")
-        final_time = mission_timer.get_elapsed_time()
-        minutes = int(final_time // 60)
-        seconds = int(final_time % 60)
-        print(f"Final time before error: {minutes:02d}:{seconds:02d}")
-
-if __name__ == "__main__":
-    main()
+    time.sleep(1200)
