@@ -328,7 +328,7 @@ class CubePilotOdometryNode(Node):
                 z=-msg.z
             )
 
-            r = R.from_euler('zyx', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
+            r = R.from_euler('xyz', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
             odom.pose.pose.orientation.x = quaternion[0]
             odom.pose.pose.orientation.y = quaternion[1]
@@ -378,7 +378,7 @@ class CubePilotOdometryNode(Node):
             imu_msg.angular_velocity.y = (msg3.ygyro / float(1000))
             imu_msg.angular_velocity.z = (msg3.zgyro / float(1000))
 
-            r = R.from_euler('zyx', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
+            r = R.from_euler('xyz', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
             imu_msg.orientation.x = quaternion[0]
             imu_msg.orientation.y = quaternion[1]

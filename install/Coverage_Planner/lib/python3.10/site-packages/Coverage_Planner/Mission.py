@@ -301,17 +301,17 @@ class CubePilotOdometryNode(Node):
         
         self.CubePilot = controller
 
+        self.timer = self.create_timer(0.1 , self.publish_odom)
+
+    def publish_odom(self):
+
         self.CubePilot.mav.request_data_stream_send(
             self.CubePilot.target_system,
             self.CubePilot.target_component,
             mavutil.mavlink.MAV_DATA_STREAM_ALL,  
-            4,  
+            50,  
             1
         )
-
-        self.timer = self.create_timer(0.25, self.publish_odom)
-
-    def publish_odom(self):
 
         msg = self.CubePilot.recv_match(type='LOCAL_POSITION_NED', blocking=False)
         msg1 = self.CubePilot.recv_match(type='ATTITUDE', blocking=False)
@@ -328,7 +328,7 @@ class CubePilotOdometryNode(Node):
                 z=-msg.z
             )
 
-            r = R.from_euler('zyx', [msg1.yaw, msg1.pitch, msg1.roll], degrees=False)
+            r = R.from_euler('xyz', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
             odom.pose.pose.orientation.x = quaternion[0]
             odom.pose.pose.orientation.y = quaternion[1]
@@ -341,9 +341,9 @@ class CubePilotOdometryNode(Node):
                 z=-msg.vz
             )
             odom.twist.twist.angular = Vector3(
-                x=msg1.rollspeed, 
-                y=msg1.pitchspeed, 
-                z=msg1.yawspeed
+                x=-msg1.yawspeed, 
+                y=-msg1.pitchspeed, 
+                z=msg1.rollspeed
             )
 
             self.odom_pub.publish(odom)
@@ -371,14 +371,14 @@ class CubePilotOdometryNode(Node):
             imu_msg = Imu()
             imu_msg.header.stamp = self.get_clock().now().to_msg()
             imu_msg.header.frame_id = 'imu_link'
-            imu_msg.linear_acceleration.x = msg3.xacc * 0.00980665  # Convert mG to m/s^2
-            imu_msg.linear_acceleration.y = msg3.yacc * 0.00980665
-            imu_msg.linear_acceleration.z = msg3.zacc * 0.00980665
-            imu_msg.angular_velocity.x = msg3.xgyro / 1000
-            imu_msg.angular_velocity.y = msg3.ygyro / 1000
-            imu_msg.angular_velocity.z = msg3.zgyro / 1000
+            imu_msg.linear_acceleration.x = msg3.xacc * float(0.00980665)  # Convert mG to m/s^2
+            imu_msg.linear_acceleration.y = msg3.yacc * float(0.00980665)
+            imu_msg.linear_acceleration.z = msg3.zacc * float(0.00980665)
+            imu_msg.angular_velocity.x = (msg3.xgyro / float(1000))
+            imu_msg.angular_velocity.y = (msg3.ygyro / float(1000))
+            imu_msg.angular_velocity.z = (msg3.zgyro / float(1000))
 
-            r = R.from_euler('zyx', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
+            r = R.from_euler('xyz', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
             imu_msg.orientation.x = quaternion[0]
             imu_msg.orientation.y = quaternion[1]
@@ -446,6 +446,5 @@ def main(args=None):
     
     set_mode(controller, mode=3)
     time.sleep(2)
-    
     start_mission(controller)
-    time.sleep(1200)
+    time.sleep(1500)

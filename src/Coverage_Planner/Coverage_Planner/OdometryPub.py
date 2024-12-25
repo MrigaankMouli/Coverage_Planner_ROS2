@@ -63,9 +63,9 @@ class CubePilotOdometryNode(Node):
                 z=-msg.vz
             )
             odom.twist.twist.angular = Vector3(
-                x=-msg1.yawspeed, 
+                x=msg1.rollspeed, 
                 y=-msg1.pitchspeed, 
-                z=msg1.rollspeed
+                z=-msg1.yawspeed
             )
 
             self.odom_pub.publish(odom)

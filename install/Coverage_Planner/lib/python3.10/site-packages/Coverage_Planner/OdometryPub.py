@@ -58,14 +58,14 @@ class CubePilotOdometryNode(Node):
             odom.pose.pose.orientation.w = quaternion[3]
 
             odom.twist.twist.linear = Vector3(
-                x=msg.vy, 
-                y=msg.vx, 
+                x=msg.vx, 
+                y=msg.vy, 
                 z=-msg.vz
             )
             odom.twist.twist.angular = Vector3(
-                x=-msg1.yawspeed, 
+                x=msg1.rollspeed, 
                 y=-msg1.pitchspeed, 
-                z=msg1.rollspeed
+                z=-msg1.yawspeed
             )
 
             self.odom_pub.publish(odom)
@@ -102,8 +102,8 @@ class CubePilotOdometryNode(Node):
 
             r = R.from_euler('zyx', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
-            imu_msg.orientation.x = quaternion[1]
-            imu_msg.orientation.y = quaternion[0]
+            imu_msg.orientation.x = quaternion[0]
+            imu_msg.orientation.y = quaternion[1]
             imu_msg.orientation.z = quaternion[2]
             imu_msg.orientation.w = quaternion[3]
 
