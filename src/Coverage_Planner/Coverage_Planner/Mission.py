@@ -43,6 +43,53 @@ def monitor_thread_func(controller):
         
         time.sleep(0.1)
 
+class MissionProgress:
+    """
+    A class to monitor the mission progress and keep the script running until the mission is complete.
+    """
+
+    def __init__(self, controller):
+        self.controller = controller
+        self.mission_count = 0
+        self.current_wp = 0
+        self.is_mission_complete = False
+
+    def get_mission_count(self):
+        """
+        Fetch the total number of waypoints in the mission.
+        """
+        self.controller.mav.mission_request_list_send(
+            self.controller.target_system, self.controller.target_component
+        )
+        msg = self.controller.recv_match(type='MISSION_COUNT', blocking=True)
+        self.mission_count = msg.count
+        print(f"Total waypoints in mission: {self.mission_count}")
+
+    def monitor_mission_progress(self):
+        """
+        Monitors the mission progress by checking the current waypoint.
+        """
+        print("Monitoring mission progress...")
+        while not self.is_mission_complete:
+            msg = self.controller.recv_match(type='MISSION_CURRENT', blocking=True, timeout=1)
+            if msg:
+                self.current_wp = msg.seq
+                print(f"Current waypoint: {self.current_wp}")
+
+                if self.current_wp >= self.mission_count:
+                    print("Mission complete!")
+                    self.is_mission_complete = True
+                    break
+
+            time.sleep(1)
+
+    def start(self):
+        """
+        Start monitoring the mission progress.
+        """
+        self.get_mission_count()
+        self.monitor_mission_progress()
+
 class MissionItem:
     def __init__(self, i, current, x, y, z):
         self.seq = i
@@ -406,6 +453,8 @@ def main(args=None):
     controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
     controller.wait_heartbeat()
     print("Connection established.")
+
+    mission_progress = MissionProgress(controller)
     
     monitor_thread = threading.Thread(target=monitor_thread_func, args=(controller,), daemon=True)
     monitor_thread.start()
@@ -415,6 +464,7 @@ def main(args=None):
         current_lat = gps_msg.lat/1e7  
         current_lon = gps_msg.lon/1e7
         relative_alt = gps_msg.relative_alt/1000
+    
     controller.mav.command_long_send(
         controller.target_system,        
         controller.target_component,
@@ -447,4 +497,5 @@ def main(args=None):
     set_mode(controller, mode=3)
     time.sleep(2)
     start_mission(controller)
-    time.sleep(1500)
+    mission_progress.start()
+    

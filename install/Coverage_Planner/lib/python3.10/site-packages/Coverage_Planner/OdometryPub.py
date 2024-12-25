@@ -58,8 +58,8 @@ class CubePilotOdometryNode(Node):
             odom.pose.pose.orientation.w = quaternion[3]
 
             odom.twist.twist.linear = Vector3(
-                x=msg.vx, 
-                y=msg.vy, 
+                x=msg.vy, 
+                y=msg.vx, 
                 z=-msg.vz
             )
             odom.twist.twist.angular = Vector3(
