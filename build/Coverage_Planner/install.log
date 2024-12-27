@@ -5,8 +5,10 @@
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/CubeOrangeTest.py
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/ArmDisarm.py
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/OdometryPub.py
+/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/ScienceMission.py
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/SimpleMission.py
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/Waypoint.py
+/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/ScienceWaypointGen.py
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/Mission.py
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/Control_Test.py
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/OdometryTest.cpython-310.pyc
@@ -16,8 +18,10 @@
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/CubeOrangeTest.cpython-310.pyc
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/ArmDisarm.cpython-310.pyc
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/OdometryPub.cpython-310.pyc
+/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/ScienceMission.cpython-310.pyc
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/SimpleMission.cpython-310.pyc
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/Waypoint.cpython-310.pyc
+/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/ScienceWaypointGen.cpython-310.pyc
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/Mission.cpython-310.pyc
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner/__pycache__/Control_Test.cpython-310.pyc
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/share/ament_index/resource_index/packages/Coverage_Planner
@@ -37,9 +41,11 @@
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/python3.10/site-packages/Coverage_Planner-0.0.0-py3.10.egg-info/SOURCES.txt
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/ArmCheck
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/Connect
+/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/CoverageMission
+/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/CoverageWaypointGeneration
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/CubeOrangeTest
-/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/Mission
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/Odometry
+/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/ScienceMission
+/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/ScienceWaypointGeneration
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/Takeoff_Land
-/home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/WaypointGeneration
 /home/zero/Desktop/ISDC/cov_ws/install/Coverage_Planner/lib/Coverage_Planner/WaypointManual

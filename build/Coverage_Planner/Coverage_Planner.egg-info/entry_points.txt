@@ -1,9 +1,11 @@
 [console_scripts]
 ArmCheck = Coverage_Planner.ArmDisarm:main
 Connect = Coverage_Planner.Connect:main
+CoverageMission = Coverage_Planner.Mission:main
+CoverageWaypointGeneration = Coverage_Planner.CoverageWaypointGeneration:main
 CubeOrangeTest = Coverage_Planner.CubeOrangeTest:main
-Mission = Coverage_Planner.Mission:main
 Odometry = Coverage_Planner.OdometryPub:main
+ScienceMission = Coverage_Planner.ScienceMission:main
+ScienceWaypointGeneration = Coverage_Planner.ScienceWaypointGen:main
 Takeoff_Land = Coverage_Planner.Takeoff_and_Land_Test:main
-WaypointGeneration = Coverage_Planner.CoverageWaypointGeneration:main
 WaypointManual = Coverage_Planner.Waypoint:main

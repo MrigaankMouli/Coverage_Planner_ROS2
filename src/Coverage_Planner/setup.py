@@ -24,12 +24,14 @@ setup(
         'console_scripts': [
             'Connect = Coverage_Planner.Connect:main',
             'Odometry = Coverage_Planner.OdometryPub:main',
-            'Mission = Coverage_Planner.Mission:main',
-            'WaypointGeneration = Coverage_Planner.CoverageWaypointGeneration:main',
+            'CoverageMission = Coverage_Planner.Mission:main',
+            'CoverageWaypointGeneration = Coverage_Planner.CoverageWaypointGeneration:main',
             'Takeoff_Land = Coverage_Planner.Takeoff_and_Land_Test:main',
             'WaypointManual = Coverage_Planner.Waypoint:main',
             'ArmCheck = Coverage_Planner.ArmDisarm:main',
-            'CubeOrangeTest = Coverage_Planner.CubeOrangeTest:main'
+            'CubeOrangeTest = Coverage_Planner.CubeOrangeTest:main',
+            'ScienceWaypointGeneration = Coverage_Planner.ScienceWaypointGen:main',
+            'ScienceMission = Coverage_Planner.ScienceMission:main'
         ],
     },
 )

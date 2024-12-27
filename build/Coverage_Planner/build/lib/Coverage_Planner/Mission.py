@@ -103,7 +103,7 @@ class MissionItem:
         self.param4 = 0.0 #Desired Yaw Angle at the WP
         self.x = int(x) #Latitude in Lat*1e7 format
         self.y = int(y) #Longitude in Lon*1e7 format
-        self.z = int(z) #Relative Altitude
+        self.z = float(z) #Relative Altitude
         self.mission_type = 0
 
 def set_mode(controller, mode):
