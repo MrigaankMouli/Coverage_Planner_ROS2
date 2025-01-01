@@ -199,5 +199,3 @@ def main(latitude=params['latitude'], longitude=params['longitude'], square_side
 
     with open(waypoints_file, 'w') as f:
         json.dump(coverage_data, f, indent=4)
-
-
