@@ -388,9 +388,9 @@ class CubePilotOdometryNode(Node):
                 z=-msg.vz
             )
             odom.twist.twist.angular = Vector3(
-                x=-msg1.yawspeed, 
+                x=msg1.rollspeed, 
                 y=msg1.pitchspeed, 
-                z=msg1.rollspeed
+                z=-msg1.yawspeed
             )
 
             self.odom_pub.publish(odom)
@@ -449,7 +449,7 @@ def PubThread_Func(controller):
 
 
 def main(args=None):
-    print("Initializing connection...")
+    print("Initializing connection...") 
     controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
     controller.wait_heartbeat()
     print("Connection established.")
