@@ -450,7 +450,7 @@ def PubThread_Func(controller):
 
 def main(args=None):
     print("Initializing connection...")
-    controller = mavutil.mavlink_connection("")
+    controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
     controller.wait_heartbeat()
     print("Connection established.")
 
