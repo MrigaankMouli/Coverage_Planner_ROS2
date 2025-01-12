@@ -396,7 +396,7 @@ class CubePilotOdometryNode(Node):
             self.odom_pub.publish(odom)
             self.get_logger().info(f"Published Odometry: X={msg.x}, Y={msg.y}, Z={msg.z}")
         else:
-            self.get_logger().warn("LOCAL_POSITION_NED or ATTITUDE message not available.")
+            self.get_logger().warn("LOCAL_POSITION_NED/ATTITUDE message not available.")
 
 
         msg2 = self.CubePilot.recv_match(type='GPS_RAW_INT', blocking=False)
