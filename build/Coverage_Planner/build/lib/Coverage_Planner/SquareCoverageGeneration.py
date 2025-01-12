@@ -164,9 +164,9 @@ params = {
         'camera_params': {
             'fov_x_deg': 90,
             'fov_y_deg': 65,
-            'altitude_feet': 24
+            'altitude_feet': 22
         },
-        'combine_factor': 1.5,
+        'combine_factor': 2,
         'output_file': 'coverage_waypoints.json'
     }
 
@@ -199,5 +199,3 @@ def main(latitude=params['latitude'], longitude=params['longitude'], square_side
 
     with open(waypoints_file, 'w') as f:
         json.dump(coverage_data, f, indent=4)
-
-main()

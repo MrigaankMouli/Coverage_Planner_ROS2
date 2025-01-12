@@ -2,10 +2,11 @@
 ArmCheck = Coverage_Planner.ArmDisarm:main
 Connect = Coverage_Planner.Connect:main
 CoverageMission = Coverage_Planner.Mission:main
-CoverageWaypointGeneration = Coverage_Planner.CoverageWaypointGeneration:main
+CoverageWaypointGeneration = Coverage_Planner.CoverageGeneration:main
 CubeOrangeTest = Coverage_Planner.CubeOrangeTest:main
 Odometry = Coverage_Planner.OdometryPub:main
 ScienceMission = Coverage_Planner.ScienceMission:main
 ScienceWaypointGeneration = Coverage_Planner.ScienceWaypointGen:main
+SquareWPGeneration = Coverage_Planner.SquareCoverageGeneration:main
 Takeoff_Land = Coverage_Planner.Takeoff_and_Land_Test:main
 WaypointManual = Coverage_Planner.Waypoint:main

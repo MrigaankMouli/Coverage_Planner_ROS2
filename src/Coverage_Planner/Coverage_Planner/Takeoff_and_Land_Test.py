@@ -146,7 +146,7 @@ def land(controller):
 
 def main():
 
-    controller = connect_to_vehicle("udpin:127.0.0.1:14550")
+    controller = connect_to_vehicle("/dev/ttm")
 
     if not controller:
         return
@@ -159,8 +159,13 @@ def main():
 
     if not arm(controller):
         return
+    
+    heartbeat = controller.recv_match(type="HEARTBEAT",blocking=False)
+    armed = heartbeat.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED
+    while not armed:
+        print("Drone not Armed")
 
-    time.sleep(7)
+    time.sleep(6)
 
     if not takeoff(controller, altitude=7):
         return

@@ -375,7 +375,7 @@ class CubePilotOdometryNode(Node):
                 z=-msg.z
             )
 
-            r = R.from_euler('xyz', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
+            r = R.from_euler('zyx', [-msg1.yaw, msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
             odom.pose.pose.orientation.x = quaternion[0]
             odom.pose.pose.orientation.y = quaternion[1]
@@ -389,7 +389,7 @@ class CubePilotOdometryNode(Node):
             )
             odom.twist.twist.angular = Vector3(
                 x=-msg1.yawspeed, 
-                y=-msg1.pitchspeed, 
+                y=msg1.pitchspeed, 
                 z=msg1.rollspeed
             )
 
@@ -425,7 +425,7 @@ class CubePilotOdometryNode(Node):
             imu_msg.angular_velocity.y = (msg3.ygyro / float(1000))
             imu_msg.angular_velocity.z = (msg3.zgyro / float(1000))
 
-            r = R.from_euler('xyz', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
+            r = R.from_euler('zyx', [-msg1.yaw, msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
             imu_msg.orientation.x = quaternion[0]
             imu_msg.orientation.y = quaternion[1]
@@ -450,7 +450,7 @@ def PubThread_Func(controller):
 
 def main(args=None):
     print("Initializing connection...")
-    controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
+    controller = mavutil.mavlink_connection("")
     controller.wait_heartbeat()
     print("Connection established.")
 
@@ -485,7 +485,7 @@ def main(args=None):
 
     home_pos = load_home_position(controller)
     package_share_dir = get_package_share_directory("Coverage_Planner")
-    lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/coverage_waypoints.json")
+    lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/Square Mission(Fuck Solar).json")
     upload_mission(controller, home_pos, lap_waypoints, altitude=7)
     arm_drone(controller)
     takeoff_drone(controller, altitude=7)
