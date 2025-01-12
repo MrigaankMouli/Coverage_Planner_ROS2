@@ -458,12 +458,6 @@ def main(args=None):
     
     monitor_thread = threading.Thread(target=monitor_thread_func, args=(controller,), daemon=True)
     monitor_thread.start()
-
-    gps_msg = controller.recv_match(type='GLOBAL_POSITION_INT', blocking=True)
-    if gps_msg:
-        current_lat = gps_msg.lat/1e7  
-        current_lon = gps_msg.lon/1e7
-        relative_alt = gps_msg.relative_alt/1000
     
     controller.mav.command_long_send(
         controller.target_system,        
@@ -474,9 +468,9 @@ def main(args=None):
         0,                               
         0,                               
         0,                               
-        current_lat,
-        current_lon,                     
-        relative_alt
+        0,
+        0,                     
+        0
     )
 
     print("Setting Mode to Guided")
