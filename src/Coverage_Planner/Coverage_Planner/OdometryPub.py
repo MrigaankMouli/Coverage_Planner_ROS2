@@ -8,8 +8,6 @@ import time
 from scipy.spatial.transform import Rotation as R
 
 
-SERIAL_PORT_CUBEPILOT = "udp:127.0.0.1:14550"
-
 class CubePilotOdometryNode(Node):
     """
     Node to Publish the Odometry, IMU, and GPS data from the GPS and the CubeOrange IMU as ROS2 messages.
@@ -50,7 +48,7 @@ class CubePilotOdometryNode(Node):
                 z=-msg.z
             )
 
-            r = R.from_euler('zyx', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
+            r = R.from_euler('zyx', [-msg1.yaw, msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
             odom.pose.pose.orientation.x = quaternion[0]
             odom.pose.pose.orientation.y = quaternion[1]
@@ -64,14 +62,14 @@ class CubePilotOdometryNode(Node):
             )
             odom.twist.twist.angular = Vector3(
                 x=msg1.rollspeed, 
-                y=-msg1.pitchspeed, 
+                y=msg1.pitchspeed, 
                 z=-msg1.yawspeed
             )
 
             self.odom_pub.publish(odom)
             self.get_logger().info(f"Published Odometry: X={msg.x}, Y={msg.y}, Z={msg.z}")
         else:
-            self.get_logger().warn("LOCAL_POSITION_NED or ATTITUDE message not available.")
+            self.get_logger().warn("LOCAL_POSITION_NED/ATTITUDE message not available.")
 
 
         msg2 = self.CubePilot.recv_match(type='GPS_RAW_INT', blocking=False)
@@ -100,7 +98,7 @@ class CubePilotOdometryNode(Node):
             imu_msg.angular_velocity.y = (msg3.ygyro / float(1000))
             imu_msg.angular_velocity.z = (msg3.zgyro / float(1000))
 
-            r = R.from_euler('zyx', [-msg1.yaw, -msg1.pitch, msg1.roll], degrees=False)
+            r = R.from_euler('zyx', [-msg1.yaw, msg1.pitch, msg1.roll], degrees=False)
             quaternion = r.as_quat()
             imu_msg.orientation.x = quaternion[0]
             imu_msg.orientation.y = quaternion[1]
@@ -114,9 +112,18 @@ class CubePilotOdometryNode(Node):
 
 
 def main(args=None):
-
-    controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
+    controller = mavutil.mavlink_connection("/dev/ttyACM0")
     controller.wait_heartbeat()
+    print("Connection to CubeOrange Successful")
+
+    controller.mav.command_long_send(
+        controller.target_system,
+        controller.target_component,
+        mavutil.mavlink.MAV_CMD_DO_SET_HOME,
+        0,
+        1,
+        0, 0, 0, 0, 0, 0)
+
     rclpy.init(args=args)
     cube_pilot_node = CubePilotOdometryNode(controller)
     rclpy.spin(cube_pilot_node)
