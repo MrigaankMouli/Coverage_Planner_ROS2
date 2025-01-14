@@ -1,15 +1,17 @@
+#!/usr/bin/env python3
+
+import rclpy
+from rclpy.node import Node
 import numpy as np
 import matplotlib.pyplot as plt
-from pyproj import Proj, Transformer
-import math
+from shapely.geometry import Polygon, Point
+import pyproj
 import json
 import os
+import math
 from ament_index_python.packages import get_package_share_directory
 
 class Camera:
-    """
-    Class to define camera parameters and altitude settings for aerial photography.
-    """
     def __init__(self, fov_x_deg, fov_y_deg, altitude_feet):
         self.fov_x_deg = fov_x_deg
         self.fov_y_deg = fov_y_deg
@@ -19,205 +21,146 @@ class Camera:
         self.fov_y_meters = self.convert_angular_fov_to_linear(self.fov_y_deg)
 
     def convert_angular_fov_to_linear(self, fov_degrees):
-        """
-        Converts angular field of view to linear distance on the ground.
-        """
         fov_radians = math.radians(fov_degrees)
         half_fov_radians = fov_radians / 2
         return 2 * self.altitude_meters * math.tan(half_fov_radians)
 
-def utm_to_gps(utm_proj, utm_x, utm_y):
-    """
-    Converts UTM coordinates to GPS coordinates (latitude, longitude).
-    """
-    gps_proj = Proj(proj='latlong', datum='WGS84')
-    transformer = Transformer.from_proj(utm_proj, gps_proj, always_xy=True)
-    lon, lat = transformer.transform(utm_x, utm_y)
-    return lat, lon
-
-def gps_to_utm(lon, lat):
-    """
-    Converts GPS coordinates (latitude, longitude) to UTM coordinates.
-    """
-    utm_proj = Proj(proj='utm', zone=18, ellps='WGS84')
-    transformer = Transformer.from_proj(Proj(proj='latlong', datum='WGS84'), utm_proj, always_xy=True)
-    utm_x, utm_y = transformer.transform(lon, lat)
-    return utm_x, utm_y
-
-def generate_square_path(center_lat, center_lon, camera, buffer_factor=1.2, start_corner=0):
-    """
-    Generates a square path around a waypoint in UTM coordinates, starting from a specified corner.
-    """
-    utm_proj = Proj(proj='utm', zone=18, ellps='WGS84')
-    center_utm_x, center_utm_y = gps_to_utm(center_lon, center_lat)
-    
-    square_size = max(camera.fov_x_meters, camera.fov_y_meters) * buffer_factor
-    half_size = square_size / 2
-    
-    square_offsets = [
-        (-half_size, half_size),   
-        (half_size, half_size),    
-        (half_size, -half_size),   
-        (-half_size, -half_size),  
-    ]
-    
-    ordered_offsets = square_offsets[start_corner:] + square_offsets[:start_corner]
-    ordered_offsets.append(ordered_offsets[0])
-    
-    waypoints = []
-    for offset_x, offset_y in ordered_offsets:
-        utm_x = center_utm_x + offset_x
-        utm_y = center_utm_y + offset_y
-        lat, lon = utm_to_gps(utm_proj, utm_x, utm_y)
-        waypoints.append({
-            'latitude': lat,
-            'longitude': lon,
-            'utm_x': utm_x,
-            'utm_y': utm_y,
-            'altitude_feet': camera.altitude_feet,
-            'altitude_meters': camera.altitude_meters
-        })
-    
-    return waypoints
-
-def generate_sequential_paths(waypoints, heights_per_waypoint, camera_params):
-    """
-    Generates sequential paths connecting all waypoints in order.
-    """
-    all_paths = []
-    all_centers = []
-    utm_proj = Proj(proj='utm', zone=18, ellps='WGS84')
-    
-    for i, (waypoint, height) in enumerate(zip(waypoints, heights_per_waypoint)):
-        center_lat, center_lon = waypoint
-        center_point = {
-            'latitude': center_lat,
-            'longitude': center_lon,
-            'altitude_feet': height,
-            'altitude_meters': height * 0.3048
-        }
-        all_centers.append(center_point)
+class CoveragePlannerNode(Node):
+    def __init__(self):
+        super().__init__('coverage_planner')
+        self.declare_parameter('coords_file', '')
+        self.declare_parameter('fov_x_deg', 20.0)
+        self.declare_parameter('fov_y_deg', 20.0)
+        self.declare_parameter('altitude_feet', 20.0)
         
-        if i < 2:  
-            camera = Camera(
-                fov_x_deg=camera_params['fov_x_deg'],
-                fov_y_deg=camera_params['fov_y_deg'],
-                altitude_feet=height
-            )
-            
-            if i == 0:
-                path_waypoints = generate_square_path(center_lat, center_lon, camera, start_corner=0)
-            else:
-                prev_point = all_paths[-1]
-                curr_utm_x, curr_utm_y = gps_to_utm(center_lon, center_lat)
-                corners_utm = []
-                for j in range(4):
-                    corner_points = generate_square_path(center_lat, center_lon, camera, start_corner=j)
-                    first_point = corner_points[0]
-                    corners_utm.append((first_point['utm_x'], first_point['utm_y']))
-                
+        self.coords_file = self.get_parameter('coords_file').get_parameter_value().string_value
+        if not self.coords_file:
+            self.get_logger().error('No coordinates file provided')
+            return
 
-                distances = [math.sqrt((prev_point['utm_x'] - x)**2 + (prev_point['utm_y'] - y)**2) 
-                           for x, y in corners_utm]
-                best_corner = distances.index(min(distances))
-                path_waypoints = generate_square_path(center_lat, center_lon, camera, start_corner=best_corner)
-            
-            if len(all_paths) > 0:
-                prev_point = all_paths[-1].copy()
-                prev_point['altitude_feet'] = height
-                prev_point['altitude_meters'] = height * 0.3048
-                all_paths.append(prev_point)
-            
-            all_paths.extend(path_waypoints)
-        else:  
-            if len(all_paths) > 0:
-                prev_point = all_paths[-1].copy()
-                prev_point['altitude_feet'] = height
-                prev_point['altitude_meters'] = height * 0.3048
-                all_paths.append(prev_point)
-            
-            utm_x, utm_y = gps_to_utm(center_lon, center_lat)
-            all_paths.append({
-                'latitude': center_lat,
-                'longitude': center_lon,
-                'utm_x': utm_x,
-                'utm_y': utm_y,
-                'altitude_feet': height,
-                'altitude_meters': height * 0.3048
-            })
-    
-    coverage_data = {
-        'center_points': all_centers,
-        'square_parameters': {
-            'camera_fov_x_deg': camera_params['fov_x_deg'],
-            'camera_fov_y_deg': camera_params['fov_y_deg'],
-            'heights': heights_per_waypoint
-        },
-        'lap_waypoints': all_paths
-    }
-    
-    return coverage_data
+        fov_x = self.get_parameter('fov_x_deg').get_parameter_value().double_value
+        fov_y = self.get_parameter('fov_y_deg').get_parameter_value().double_value
+        altitude = self.get_parameter('altitude_feet').get_parameter_value().double_value
+        
+        self.camera = Camera(fov_x, fov_y, altitude)
+        self.process_coordinates()
 
-def plot_paths(coverage_data):
-    """
-    Plots the waypoint paths using UTM coordinates
-    """
-    plt.figure(figsize=(12, 12))
-    
-    for center in coverage_data['center_points']:
-        center_utm_x, center_utm_y = gps_to_utm(center['longitude'], center['latitude'])
-        plt.plot(center_utm_x, center_utm_y, 'ko', markersize=10)
-    
-    waypoints_by_height = {}
-    for wp in coverage_data['lap_waypoints']:
-        height = wp['altitude_feet']
-        if height not in waypoints_by_height:
-            waypoints_by_height[height] = {'x': [], 'y': []}
-        waypoints_by_height[height]['x'].append(wp['utm_x'])
-        waypoints_by_height[height]['y'].append(wp['utm_y'])
-    
-    for i, (height, coords) in enumerate(sorted(waypoints_by_height.items())):
-        plt.plot(coords['x'], coords['y'], f'ro-', 
-                label=f'Path at {height}ft', alpha=0.7)
+    def utm_to_gps(self, utm_proj, utm_x, utm_y):
+        gps_proj = pyproj.Proj(proj='latlong', datum='WGS84')
+        lon, lat = pyproj.transform(utm_proj, gps_proj, utm_x, utm_y)
+        return lat, lon
 
-    plt.title('Waypoint Paths at Different Heights')
-    plt.xlabel('UTM X (meters)')
-    plt.ylabel('UTM Y (meters)')
-    plt.legend()
-    plt.grid(True)
-    plt.axis('equal')
-    plt.show()
+    def save_waypoints(self, boustrophedon_path, utm_proj):
+        lap_waypoints = []
+        for point in boustrophedon_path:
+            lat, lon = self.utm_to_gps(utm_proj, point[0], point[1])
+            waypoint = {
+                "latitude": round(lat, 7),
+                "longitude": round(lon, 7),
+                "altitude": self.camera.altitude_feet
+            }
+            lap_waypoints.append(waypoint)
+        
+        waypoint_data = {
+            "lap_waypoints": lap_waypoints,
+            "coverage_waypoints": [],
+            "airdrop_waypoints": []
+        }
+
+        package_share_dir = get_package_share_directory("Coverage_Planner")
+        waypoints_file = os.path.join(package_share_dir, 'Waypoints', 'coverage_waypoints.json')
+        os.makedirs(os.path.dirname(waypoints_file), exist_ok=True)
+
+        with open(waypoints_file, 'w') as f:
+            json.dump(waypoint_data, f, indent=4)
+        
+        self.get_logger().info(f"Saved {len(lap_waypoints)} waypoints to {waypoints_file}")
+
+    def process_coordinates(self):
+        with open(self.coords_file, 'r') as f:
+            data = json.load(f)
+            latitudes = [wp["latitude"] for wp in data.get("lap_waypoints",[])]
+            longitudes = [wp["longitude"] for wp in data.get("lap_waypoints",[])]
+        
+        points = list(zip(longitudes, latitudes))
+        utm_proj = pyproj.Proj(proj='utm', zone=18, ellps='WGS84')
+        utm_points = [utm_proj(lon, lat) for lon, lat in points]
+        polygon = Polygon(utm_points)
+        
+        cell_width = self.camera.fov_x_meters
+        cell_height = self.camera.fov_y_meters
+        
+        centroids = []
+        min_x, min_y, max_x, max_y = polygon.bounds
+        cells = []
+        x = min_x
+        while x < max_x:
+            y = min_y
+            while y < max_y:
+                cell = Polygon([(x, y), (x + cell_width, y), 
+                              (x + cell_width, y + cell_height), 
+                              (x, y + cell_height)])
+                intersection = polygon.intersection(cell)
+                if not intersection.is_empty and not isinstance(intersection, Point):
+                    cells.append(cell)
+                    centroids.append(cell.centroid)
+                y += cell_height
+            x += cell_width
+        
+        centroids_within_polygon = [centroid for centroid in centroids 
+                                  if polygon.contains(centroid)]
+        centroid_coords = np.array([(c.x, c.y) for c in centroids_within_polygon])
+        sorted_centroids = sorted(centroid_coords, key=lambda p: (p[1], p[0]))
+        
+        rows = []
+        current_row = []
+        if len(sorted_centroids) > 0:
+            row_y = sorted_centroids[0][1]
+            tolerance = 1e-3
+            
+            for centroid in sorted_centroids:
+                if abs(centroid[1] - row_y) < tolerance:
+                    current_row.append(centroid)
+                else:
+                    rows.append(current_row)
+                    current_row = [centroid]
+                    row_y = centroid[1]
+            rows.append(current_row)
+            
+            boustrophedon_path = []
+            for i, row in enumerate(rows):
+                if i % 2 == 0:
+                    boustrophedon_path.extend(sorted(row, key=lambda p: p[0]))
+                else:
+                    boustrophedon_path.extend(sorted(row, key=lambda p: p[0], 
+                                                    reverse=True))
+            
+            fig, ax = plt.subplots()
+            x, y = polygon.exterior.xy
+            ax.plot(x, y, color='red', label='Polygon Boundary')
+            
+            for centroid in centroids_within_polygon:
+                ax.plot(centroid.x, centroid.y, 'bo')
+            
+            path_x, path_y = zip(*boustrophedon_path)
+            ax.plot(path_x, path_y, 'g-', marker='o', label='Boustrophedon Path')
+            ax.set_aspect('equal')
+            plt.legend()
+            plt.show()
+            
+            self.get_logger().info("Boustrophedon Path:")
+            for point in boustrophedon_path:
+                self.get_logger().info(f"({point[0]}, {point[1]})")
+            self.get_logger().info(f"Total waypoints: {len(boustrophedon_path)}")
+            
+            self.save_waypoints(boustrophedon_path, utm_proj)
 
 def main():
-    waypoints = [
-        (-35.3614651, 149.1652373),  
-        (-35.3624651, 149.1662373),  
-        (-35.3634651, 149.1672373)   
-    ]
-    
-    camera_params = {
-        'fov_x_deg': 90,
-        'fov_y_deg': 65
-    }
-    
-    heights_per_waypoint = [10, 15, 20]  
-    
-    coverage_data = generate_sequential_paths(
-        waypoints=waypoints,
-        heights_per_waypoint=heights_per_waypoint,
-        camera_params=camera_params
-    )
+    rclpy.init()
+    node = CoveragePlannerNode()
+    rclpy.spin_once(node)
+    node.destroy_node()
+    rclpy.shutdown()
 
-    print(f"Number of waypoints generated: {len(coverage_data['lap_waypoints'])}")
-    plot_paths(coverage_data)
-    
-
-    package_share_dir = get_package_share_directory("Coverage_Planner")
-    waypoints_file = os.path.join(package_share_dir, 'Waypoints', 'science_mission_waypoints.json')
-    os.makedirs(os.path.dirname(waypoints_file), exist_ok=True)
-
-    with open(waypoints_file, 'w') as f:
-        json.dump(coverage_data, f, indent=4)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
