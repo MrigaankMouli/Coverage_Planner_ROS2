@@ -21,7 +21,9 @@ class CubePilotOdometryNode(Node):
         
         self.CubePilot = controller
 
-        self.timer = self.create_timer(0.1 , self.publish_odom)
+        self.timer = self.create_timer(0.1
+
+ , self.publish_odom)
 
     def publish_odom(self):
 

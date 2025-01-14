@@ -25,14 +25,15 @@ setup(
             'Connect = Coverage_Planner.Connect:main',
             'Odometry = Coverage_Planner.OdometryPub:main',
             'CoverageMission = Coverage_Planner.Mission:main',
-            'CoverageWaypointGeneration = Coverage_Planner.CoverageGeneration:main',
+            'CircleWPGeneration = Coverage_Planner.CoverageGeneration:main',
             'SquareWPGeneration = Coverage_Planner.SquareCoverageGeneration:main',
             'Takeoff_Land = Coverage_Planner.Takeoff_and_Land_Test:main',
             'WaypointManual = Coverage_Planner.Waypoint:main',
             'ArmCheck = Coverage_Planner.ArmDisarm:main',
             'CubeOrangeTest = Coverage_Planner.CubeOrangeTest:main',
             'ScienceWaypointGeneration = Coverage_Planner.ScienceWaypointGen:main',
-            'ScienceMission = Coverage_Planner.ScienceMission:main'
+            'ScienceMission = Coverage_Planner.ScienceMission:main',
+            'CoverageGeneration = Coverage_Planner.CoverageWP:main'
         ],
     },
 )
