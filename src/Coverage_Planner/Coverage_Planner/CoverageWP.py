@@ -25,7 +25,7 @@ class Camera:
         half_fov_radians = fov_radians / 2
         return 2 * self.altitude_meters * math.tan(half_fov_radians)
 
-def calculate_haversine_distance(lat1, lon1, lat2, lon2):
+def haversine_disance(lat1, lon1, lat2, lon2):
     """
     Calculate the great circle distance between two points 
     on the earth (specified in decimal degrees)
@@ -75,7 +75,7 @@ class CoveragePlannerNode(Node):
             lat2 = waypoints[i + 1]["latitude"]
             lon2 = waypoints[i + 1]["longitude"]
             
-            distance = calculate_haversine_distance(lat1, lon1, lat2, lon2)
+            distance = haversine_disance(lat1, lon1, lat2, lon2)
             total_distance += distance
         
         return total_distance
