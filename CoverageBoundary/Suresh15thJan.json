@@ -1,0 +1,106 @@
+{
+  "lap_waypoints": [
+    {
+      "latitude": 13.349617907425376,
+      "longitude": 74.79149468487124,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349666208738608,
+      "longitude": 74.79146652219944,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349751062373583,
+      "longitude": 74.79138605742284,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349770643977418,
+      "longitude": 74.79130425156667,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349860719334606,
+      "longitude": 74.79126536025798,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349966459928437,
+      "longitude": 74.79121574031242,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.350068284160193,
+      "longitude": 74.79119562411832,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.350145305024911,
+      "longitude": 74.79121171707361,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.350211882362766,
+      "longitude": 74.79127340673567,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.35024974005649,
+      "longitude": 74.79136191798986,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.350261488994708,
+      "longitude": 74.79147993299551,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.35024974005649,
+      "longitude": 74.79157783180702,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.350194911670544,
+      "longitude": 74.7916730484593,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.350070895037355,
+      "longitude": 74.79170657544951,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349946878340466,
+      "longitude": 74.79169987005147,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349877690050326,
+      "longitude": 74.79167975385734,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.3497836983791,
+      "longitude": 74.79166366090206,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349713204601667,
+      "longitude": 74.79165561442437,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.34967534682381,
+      "longitude": 74.79163013391178,
+      "altitude": 90
+    },
+    {
+      "latitude": 13.349634878158158,
+      "longitude": 74.79155369237404,
+      "altitude": 90
+    }
+  ],
+  "coverage_waypoints": [],
+  "airdrop_waypoints": []
+}
