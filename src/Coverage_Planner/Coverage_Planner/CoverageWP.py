@@ -25,6 +25,20 @@ class Camera:
         half_fov_radians = fov_radians / 2
         return 2 * self.altitude_meters * math.tan(half_fov_radians)
 
+def calculate_haversine_distance(lat1, lon1, lat2, lon2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+    c = 2 * math.asin(math.sqrt(a))
+    r = 6371000  
+    return c * r
+
 class CoveragePlannerNode(Node):
     def __init__(self):
         super().__init__('coverage_planner')
@@ -38,7 +52,6 @@ class CoveragePlannerNode(Node):
             self.get_logger().error('No coordinates file provided')
             return
 
-        # Initialize camera with parameters
         fov_x = self.get_parameter('fov_x_deg').get_parameter_value().double_value
         fov_y = self.get_parameter('fov_y_deg').get_parameter_value().double_value
         altitude = self.get_parameter('altitude_feet').get_parameter_value().double_value
@@ -51,6 +64,22 @@ class CoveragePlannerNode(Node):
         lon, lat = pyproj.transform(utm_proj, gps_proj, utm_x, utm_y)
         return lat, lon
 
+    def calculate_total_distance(self, waypoints):
+        """
+        Calculate the total distance of the path in meters
+        """
+        total_distance = 0
+        for i in range(len(waypoints) - 1):
+            lat1 = waypoints[i]["latitude"]
+            lon1 = waypoints[i]["longitude"]
+            lat2 = waypoints[i + 1]["latitude"]
+            lon2 = waypoints[i + 1]["longitude"]
+            
+            distance = calculate_haversine_distance(lat1, lon1, lat2, lon2)
+            total_distance += distance
+        
+        return total_distance
+
     def save_waypoints(self, boustrophedon_path, utm_proj):
         lap_waypoints = []
         for point in boustrophedon_path:
@@ -62,10 +91,14 @@ class CoveragePlannerNode(Node):
             }
             lap_waypoints.append(waypoint)
         
+        total_distance = self.calculate_total_distance(lap_waypoints)
+        
         waypoint_data = {
             "lap_waypoints": lap_waypoints,
             "coverage_waypoints": [],
-            "airdrop_waypoints": []
+            "airdrop_waypoints": [],
+            "total_distance_meters": round(total_distance, 2),
+            "total_distance_kilometers": round(total_distance / 1000, 2)
         }
 
         package_share_dir = get_package_share_directory("Coverage_Planner")
@@ -76,6 +109,8 @@ class CoveragePlannerNode(Node):
             json.dump(waypoint_data, f, indent=4)
         
         self.get_logger().info(f"Saved {len(lap_waypoints)} waypoints to {waypoints_file}")
+        self.get_logger().info(f"Total path distance: {waypoint_data['total_distance_meters']} meters "
+                              f"({waypoint_data['total_distance_kilometers']} km)")
 
     def process_coordinates(self):
         with open(self.coords_file, 'r') as f:
@@ -88,7 +123,6 @@ class CoveragePlannerNode(Node):
         utm_points = [utm_proj(lon, lat) for lon, lat in points]
         polygon = Polygon(utm_points)
         
-        # Use camera FOV for cell dimensions
         cell_width = self.camera.fov_x_meters
         cell_height = self.camera.fov_y_meters
         
