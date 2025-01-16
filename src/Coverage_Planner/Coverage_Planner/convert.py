@@ -13,7 +13,6 @@ def read_waypoints_from_json(json_file):
     """
     with open(json_file, 'r') as f:
         data = json.load(f)
-        # Convert JSON data to list of tuples
         waypoints = [(point['latitude'], point['longitude']) for point in data['lap_waypoints']]
     return waypoints
 
@@ -27,22 +26,17 @@ def create_waypoints_file(waypoints, output_file, start_altitude=113.78, waypoin
         start_altitude: Altitude for the first waypoint in meters
         waypoint_altitude: Altitude for subsequent waypoints in meters
     """
-    # Ensure output file has .waypoints extension
     if not output_file.endswith('.waypoints'):
         output_file += '.waypoints'
     
-    # Create the header line
     header = 'QGC WPL 110\n'
     
     with open(output_file, 'w') as f:
-        # Write header
         f.write(header)
         
-        # Write waypoints
         for i, (lat, lon) in enumerate(waypoints):
-            # Set parameters based on whether it's the first waypoint
-            current = 1 if i == 0 else 0
-            frame = 0 if i == 0 else 3  # First point global, others relative
+            current = 0 if i == 0 else 0
+            frame = 0 if i == 0 else 3  
             alt = start_altitude if i == 0 else waypoint_altitude
             
             # Format: INDEX CURRENT FRAME COMMAND P1 P2 P3 P4 LAT LON ALT AUTOCONTINUE
@@ -50,16 +44,7 @@ def create_waypoints_file(waypoints, output_file, start_altitude=113.78, waypoin
             f.write(line)
 
 if __name__ == "__main__":
-    # Example JSON file structure:
-
+    waypoints = read_waypoints_from_json("/home/zero/Desktop/ISDC/cov_ws/src/Coverage_Planner/Waypoints/coverage_waypoints.json")
     
-    # # Save example JSON to file (for testing)
-    # with open("coverage_waypoints.json", "w") as f:
-    #     json.dump(example_json, f, indent=4)
-    
-    # Read waypoints from JSON file
-    waypoints = read_waypoints_from_json("coverage_waypoints.json")
-    
-    # Create the waypoints file
     create_waypoints_file(waypoints, "mission_waypoints")
     print("Waypoints file created successfully!")
