@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import rclpy
 from rclpy.node import Node
 import numpy as np
@@ -45,7 +43,7 @@ class CoveragePlannerNode(Node):
         self.declare_parameter('coords_file', '')
         self.declare_parameter('fov_x_deg', 90.0)
         self.declare_parameter('fov_y_deg', 65.0)
-        self.declare_parameter('altitude_feet', 18.0)
+        self.declare_parameter('altitude_feet', 20.0)
         
         self.coords_file = self.get_parameter('coords_file').get_parameter_value().string_value
         if not self.coords_file:
@@ -124,7 +122,7 @@ class CoveragePlannerNode(Node):
         polygon = Polygon(utm_points)
         
         cell_width = self.camera.fov_x_meters
-        cell_height = self.camera.fov_y_meters
+        cell_height = self.camera.fov_y_meters*0.7  
         
         centroids = []
         min_x, min_y, max_x, max_y = polygon.bounds

@@ -33,7 +33,9 @@ setup(
             'CubeOrangeTest = Coverage_Planner.CubeOrangeTest:main',
             'ScienceWaypointGeneration = Coverage_Planner.ScienceWaypointGen:main',
             'ScienceMission = Coverage_Planner.ScienceMission:main',
-            'CoverageGeneration = Coverage_Planner.CoverageWP:main'
+            'CoverageGeneration = Coverage_Planner.CoverageWP:main',
+            'Disarm = Coverage_Planner.disarm:main',
+            'Land = Coverage_Planner.Land:main'
         ],
     },
 )
