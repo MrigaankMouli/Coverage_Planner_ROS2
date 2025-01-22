@@ -35,6 +35,20 @@ class Camera:
         half_fov_radians = fov_radians / 2
         return 2 * self.altitude_meters * math.tan(half_fov_radians)
 
+def haversine_disance(lat1, lon1, lat2, lon2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+    c = 2 * math.asin(math.sqrt(a))
+    r = 6371000  
+    return c * r
+
 def utm_to_gps(utm_proj, utm_x, utm_y):
     """
     Converts UTM coordinates to GPS coordinates (latitude, longitude).
@@ -64,7 +78,7 @@ def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_fa
     utm_x, utm_y = gps_to_utm(lon, lat)
 
     step_x = camera.fov_x_meters * combine_factor
-    step_y = camera.fov_y_meters 
+    step_y = camera.fov_y_meters*0.75
 
     x_grids = int(np.ceil(square_side / step_x))
     y_grids = int(np.ceil(square_side / step_y))
@@ -98,6 +112,8 @@ def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_fa
                 'utm_x': transition_x,
                 'utm_y': transition_y
             })
+    
+    calculate_total_distance(waypoints)
 
     return {
         'center_point': {'latitude': lat, 'longitude': lon},
@@ -111,6 +127,22 @@ def generate_square_coverage_waypoints(lat, lon, square_side, camera, combine_fa
         },
         'lap_waypoints': waypoints
     }
+
+def calculate_total_distance(waypoints):
+        """
+        Calculate the total distance of the path in meters
+        """
+        total_distance = 0
+        for i in range(len(waypoints) - 1):
+            lat1 = waypoints[i]["latitude"]
+            lon1 = waypoints[i]["longitude"]
+            lat2 = waypoints[i + 1]["latitude"]
+            lon2 = waypoints[i + 1]["longitude"]
+            
+            distance = haversine_disance(lat1, lon1, lat2, lon2)
+            total_distance += distance
+        print(f"Total distance covered in Meters = {total_distance}")
+        
 
 def plot_square_coverage(coverage_data):
     """
@@ -160,11 +192,11 @@ def plot_square_coverage(coverage_data):
 params = {
         'latitude': -35.3614651,
         'longitude': 149.1652373,
-        'square_side': 200,
+        'square_side': 150,
         'camera_params': {
             'fov_x_deg': 90,
             'fov_y_deg': 65,
-            'altitude_feet': 24
+            'altitude_feet': 20
         },
         'combine_factor': 1.5,
         'output_file': 'coverage_waypoints.json'

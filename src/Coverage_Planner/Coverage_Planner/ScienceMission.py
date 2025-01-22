@@ -7,60 +7,9 @@ from pymavlink import mavutil
 import time
 import threading
 from ament_index_python.packages import get_package_share_directory
-from scipy.spatial.transform import Rotation as R
 import os
 import json
-import tkinter as tk
-
-class AltitudeMonitorThread(threading.Thread):
-    def __init__(self, controller):
-        super().__init__(daemon=True)
-        self.controller = controller
-        self.current_altitude_ft = "N/A"
-        self.root = None
-        self.altitude_label = None
-        self.running = True
-
-    def setup_ui(self):
-        self.root = tk.Tk()
-        self.root.title("Altitude Monitor")
-        self.root.geometry("200x100")
-        self.altitude_label = tk.Label(self.root, text="Altitude: N/A", font=('Arial', 14))
-        self.altitude_label.pack(pady=20)
-
-    def update_display(self):
-        if self.running:
-            self.altitude_label.config(text=f"Altitude: {self.current_altitude_ft}")
-            self.root.after(500, self.update_display)
-
-    def run(self):
-        self.setup_ui()
-        self.update_display()
-        
-        while self.running:
-            try:
-                msg = self.controller.recv_match(type='GLOBAL_POSITION_INT', blocking=True, timeout=1)
-                if msg:
-                    altitude_m = msg.relative_alt / 1000.0
-                    altitude_ft = altitude_m * 3.28084
-                    self.current_altitude_ft = f"{altitude_ft:.2f} ft"
-                    
-            except Exception as e:
-                self.current_altitude_ft = "Error"
-            
-            if self.root:
-                try:
-                    self.root.update()
-                except tk.TkError:
-                    self.running = False
-                    break
-
-    def stop(self):
-        self.running = False
-        if self.root:
-            self.root.quit()
-            self.root.destroy()
-
+import os
 
 def monitor_thread_func(controller):
     """
@@ -93,57 +42,38 @@ def monitor_thread_func(controller):
         
         time.sleep(0.1)
 
-class MissionProgress:
+def monitor_waypoint_progress(controller):
     """
-    A class to monitor the mission progress and keep the script running until the mission is complete.
+    Monitors progress of the entire mission.
+
     """
+    print("Starting waypoint monitoring...")
 
-    def __init__(self, controller):
-        self.controller = controller
-        self.mission_count = 0
-        self.current_wp = 0
-        self.is_mission_complete = False
+    controller.mav.mission_request_list_send(
+        controller.target_system,
+        controller.target_component
+    )
+    msg = controller.recv_match(type='MISSION_COUNT', blocking=True, timeout=5)
+    if not msg:
+        print("Failed to get the total number of waypoints.")
+        return
 
-    def get_mission_count(self):
-        """
-        Fetch the total number of waypoints in the mission.
-        """
-        self.controller.mav.mission_request_list_send(
-            self.controller.target_system, self.controller.target_component
-        )
-        msg = self.controller.recv_match(type='MISSION_COUNT', blocking=True)
-        self.mission_count = msg.count
-        print(f"Total waypoints in mission: {self.mission_count}")
+    total_waypoints = msg.count
+    print(f"Total waypoints: {total_waypoints}")
 
-    def monitor_mission_progress(self):
-        """
-        Monitors the mission progress by checking the current waypoint.
-        """
-        print("Monitoring mission progress...")
-        while not self.is_mission_complete:
-            msg = self.controller.recv_match(type='MISSION_CURRENT', blocking=True, timeout=1)
-            if msg:
-                self.current_wp = msg.seq
-                print(f"Current waypoint: {self.current_wp}")
+    while True:
+        reached_msg = controller.recv_match(type='MISSION_ITEM_REACHED', blocking=True)
+        if reached_msg:
+            if reached_msg.seq == 0:
+                continue
 
-                first_wp = False
+            print(f"Waypoint {reached_msg.seq} reached!")
 
-                if self.current_wp == 2:
-                    first_wp = True
-                
-                if self.current_wp == 1 and first_wp:
-                    print("Mission complete!")
-                    self.is_mission_complete = True
-                    break
+            if reached_msg.seq == total_waypoints :
+                print("Final waypoint reached. Mission complete.")
+                break
 
-            time.sleep(1)
 
-    def start(self):
-        """
-        Start monitoring the mission progress.
-        """
-        self.get_mission_count()
-        self.monitor_mission_progress()
 
 class MissionItem:
     def __init__(self, i, current, x, y, z):
@@ -152,7 +82,7 @@ class MissionItem:
         self.command = mavutil.mavlink.MAV_CMD_NAV_WAYPOINT
         self.current = current
         self.auto = 1 #AutoContinue to next WP(0 for false, 1 for true)
-        self.param1 = 0.0 #Hold Time in Seconds
+        self.param1 = 3.0 #Hold Time in Seconds
         self.param2 = 0.5 #Acceptance Radius in Metres
         self.param3 = 0.0 #Pass Radius(1 to Loiter at the WP for duration specified in Param1 and 0 to Pass through the WP)
         self.param4 = 0.0 #Desired Yaw Angle at the WP
@@ -247,7 +177,7 @@ def load_lap_waypoints(file_path):
     print(f"Loading lap waypoints from {file_path}...")
     with open(file_path, 'r') as f:
         data = json.load(f)
-        return [{"lat": wp["latitude"]*1e7, "lon": wp["longitude"]*1e7, "alt":wp['altitude_meters']} for wp in data.get("lap_waypoints", [])]
+        return [{"lat": wp["latitude"], "lon": wp["longitude"]} for wp in data.get("lap_waypoints", [])]
 
 def upload_mission(controller, home_pos, vertices):
     """
@@ -259,12 +189,12 @@ def upload_mission(controller, home_pos, vertices):
     print("Uploading mission...")
     controller.mav.mission_clear_all_send(controller.target_system, controller.target_component)
     time.sleep(1)
-    mission_items = [MissionItem(0, current=1, x=home_pos[0], y=home_pos[1], z=3.048)]
+    mission_items = [MissionItem(0, current=1, x=home_pos[0], y=home_pos[1], z=7)]
     mission_items[0].command = mavutil.mavlink.MAV_CMD_NAV_TAKEOFF
     print("Takeoff waypoint added.")
 
     for i, vertex in enumerate(vertices, start=1):
-        mission_items.append(MissionItem(i, current=0, x=vertex['lat'], y=vertex['lon'], z=vertex['alt']))
+        mission_items.append(MissionItem(i, current=1, x=vertex['lat'], y=vertex['lon'], z=7))
         print(f"Waypoint {i} added: {vertex['lat']}, {vertex['lon']}")
 
     mission_items.append(MissionItem(len(vertices)+1, current=0, x=home_pos[0], y=home_pos[1], z=0))
@@ -294,35 +224,6 @@ def upload_mission(controller, home_pos, vertices):
         time.sleep(0.001)
         print(f"Mission item {item.seq} uploaded.")
 
-def get_mission_count(controller):
-    """
-    Returns the Mission Count
-
-    """
-    controller.mav.mission_request_list_send(controller.target_system, controller.target_component)
-    msg = controller.recv_match(type='MISSION_COUNT', blocking=True)
-    return msg.count
-
-def monitor_mission(controller):
-    """
-    Monitors the Mission Progress
-
-    """
-    mission_count = get_mission_count(controller)
-    print(f"Total waypoints: {mission_count}")
-
-    while True:
-        msg = controller.recv_match(type='MISSION_CURRENT', blocking=True, timeout=1)
-        if msg is not None:
-            current_wp = msg.seq
-            print(f"Current waypoint: {current_wp}")
-
-            if current_wp >= mission_count:
-                print("Mission complete!")
-                break
-
-        time.sleep(1)
-
 def arm_drone(controller):
     """
     Arming the Drone
@@ -338,7 +239,7 @@ def arm_drone(controller):
         0,
         0, 0, 0, 0, 0
     )
-    time.sleep(2)
+    # time.sleep(2)
     print("Drone armed.")
 
 def takeoff_drone(controller, altitude):
@@ -394,8 +295,6 @@ def main(args=None):
     controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
     controller.wait_heartbeat()
     print("Connection established.")
-
-    mission_progress = MissionProgress(controller)
     
     monitor_thread = threading.Thread(target=monitor_thread_func, args=(controller,), daemon=True)
     monitor_thread.start()
@@ -404,6 +303,7 @@ def main(args=None):
     if gps_msg:
         current_lat = gps_msg.lat/1e7  
         current_lon = gps_msg.lon/1e7
+
         relative_alt = gps_msg.relative_alt/1000
     
     controller.mav.command_long_send(
@@ -426,17 +326,46 @@ def main(args=None):
 
     home_pos = load_home_position(controller)
     package_share_dir = get_package_share_directory("Coverage_Planner")
-    lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/science_mission_waypoints.json")
+    lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/coverage_boundary.json")
     upload_mission(controller, home_pos, lap_waypoints)
     arm_drone(controller)
+    time.sleep(2)
     takeoff_drone(controller, altitude=3.048)
-    time.sleep(8)
-
-    alt_monitor = AltitudeMonitorThread(controller)
-    alt_monitor.start()
-
+    time.sleep(8) 
     set_mode(controller, mode=3)
     time.sleep(2)
     start_mission(controller)
-    mission_progress.start()        
+
+    print("Starting waypoint monitoring...")
+
+    controller.mav.mission_request_list_send(
+        controller.target_system,
+        controller.target_component
+    )
+    msg = controller.recv_match(type='MISSION_COUNT', blocking=False)
+
+    while not msg:
+        print("Failed to get the total number of waypoints.")
+        msg = controller.recv_match(type='MISSION_COUNT', blocking=False)
+
+    total_waypoints = msg.count
+    print(f"Total waypoints: {total_waypoints}")
+
+    mission_end_flag = 0
+
+    while True:
+        reached_msg = controller.recv_match(type='MISSION_ITEM_REACHED', blocking=True)
+        if reached_msg:
+            if reached_msg.seq == 0:
+                continue
+
+            print(f"Waypoint {reached_msg.seq} reached!")
+
+            if reached_msg.seq == 1 and mission_end_flag == 1 :
+                print("Final waypoint reached. Mission complete.")
+                break
+        
+            if reached_msg.seq == 1 and mission_end_flag == 0 :
+                mission_end_flag = 1
+
     

@@ -82,7 +82,7 @@ def arm_drone(controller):
         0, 0, 0, 0, 0
     )
     print("Drone armed.")
-    time.sleep(5)
+    time.sleep(2)
 
 def takeoff_drone(controller, altitude):
     """

@@ -35,7 +35,7 @@ def land(controller, max_retries=5):
 
 def main():
     print("Initializing connection...")
-    controller = mavutil.mavlink_connection("/dev/ttyACM0")
+    controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
     controller.wait_heartbeat()
     print("Connection Established")
 
