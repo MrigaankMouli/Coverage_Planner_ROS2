@@ -1,7 +1,7 @@
 {
 "lap_waypoints":[
-{"latitude": -353632527, "longitude": 1491652373}, 
-{"latitude": -353632530, "longitude": 1491652487}, 
-{"latitude": -353632623, "longitude": 1491652485}
+{"latitude": -353632527, "longitude": 1491652373, "altitude_meters" : 3.048}, 
+{"latitude": -353632530, "longitude": 1491652487, "altitude_meters" : 4.572}, 
+{"latitude": -353632623, "longitude": 1491652485, "altitude_meters" : 6.096}
 ]
 }

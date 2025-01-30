@@ -10,6 +10,22 @@ from ament_index_python.packages import get_package_share_directory
 import os
 import json
 import os
+import requests
+
+url_start = "http://192.168.31.225:3000/WaypointStart/"
+url_stop = "http://192.168.31.225:3000/WaypointStop/"
+
+
+def URL_Thread(url):
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            print(response.text)
+            return  
+        else:
+            print("Request failed with status code:", response.status_code)
+    except Exception as e:
+        print(f"Error in URL request: {e}")
 
 def monitor_thread_func(controller):
     """
@@ -83,7 +99,7 @@ class MissionItem:
         self.current = current
         self.auto = 1 #AutoContinue to next WP(0 for false, 1 for true)
         self.param1 = 3.0 #Hold Time in Seconds
-        self.param2 = 0.5 #Acceptance Radius in Metres
+        self.param2 = 0.8 #Acceptance Radius in Metres
         self.param3 = 0.0 #Pass Radius(1 to Loiter at the WP for duration specified in Param1 and 0 to Pass through the WP)
         self.param4 = 0.0 #Desired Yaw Angle at the WP
         self.x = int(x) #Latitude in Lat*1e7 format
@@ -177,7 +193,7 @@ def load_lap_waypoints(file_path):
     print(f"Loading lap waypoints from {file_path}...")
     with open(file_path, 'r') as f:
         data = json.load(f)
-        return [{"lat": wp["latitude"], "lon": wp["longitude"]} for wp in data.get("lap_waypoints", [])]
+        return [{"lat": wp["latitude"]*1e7, "lon": wp["longitude"]*1e7, "altitude": wp["altitude_meters"]} for wp in data.get("lap_waypoints", [])]
 
 def upload_mission(controller, home_pos, vertices):
     """
@@ -292,7 +308,7 @@ def start_mission(controller):
 
 def main(args=None):
     print("Initializing connection...")
-    controller = mavutil.mavlink_connection("udpin:127.0.0.1:14550")
+    controller = mavutil.mavlink_connection("/dev/ttyACM0")
     controller.wait_heartbeat()
     print("Connection established.")
     
@@ -326,7 +342,7 @@ def main(args=None):
 
     home_pos = load_home_position(controller)
     package_share_dir = get_package_share_directory("Coverage_Planner")
-    lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/coverage_boundary.json")
+    lap_waypoints = load_lap_waypoints(os.path.join(package_share_dir, 'Waypoints')+"/science_mission_waypoints.json")
     upload_mission(controller, home_pos, lap_waypoints)
     arm_drone(controller)
     time.sleep(2)
@@ -337,35 +353,42 @@ def main(args=None):
     start_mission(controller)
 
     print("Starting waypoint monitoring...")
-
     controller.mav.mission_request_list_send(
         controller.target_system,
         controller.target_component
     )
-    msg = controller.recv_match(type='MISSION_COUNT', blocking=False)
 
-    while not msg:
-        print("Failed to get the total number of waypoints.")
-        msg = controller.recv_match(type='MISSION_COUNT', blocking=False)
-
-    total_waypoints = msg.count
-    print(f"Total waypoints: {total_waypoints}")
-
-    mission_end_flag = 0
+    current_waypoint = 1
+    waypoint_group_start = [1, 7, 13]
+    waypoint_group_center = [6, 12, 18]
+    idx_start = 0
+    idx_center = 0
 
     while True:
-        reached_msg = controller.recv_match(type='MISSION_ITEM_REACHED', blocking=True)
+        reached_msg = controller.recv_match(type='MISSION_ITEM_REACHED', blocking=False)
         if reached_msg:
-            if reached_msg.seq == 0:
-                continue
+            print(f"Raw Mavlink Message{reached_msg}")
+            print(f"Waypoint {reached_msg.seq} reached")
+            if idx_start < 3 and reached_msg.seq == waypoint_group_start[idx_start]:
+                print(f"First waypoint of set {current_waypoint} reached: {reached_msg.seq}")
+                idx_start += 1
+                print("Starting Sensor Data Request Thread")
+                url_send = url_start + f"{current_waypoint}"
+                threading.Thread(target=URL_Thread,args=(url_send,)).start()
+                # Stiching start signal goes here
 
-            print(f"Waypoint {reached_msg.seq} reached!")
+            if idx_center <3 and reached_msg.seq == waypoint_group_center[idx_center]:
+                print(f"Center waypoint of set {current_waypoint} reached: {reached_msg.seq}")
+                idx_center += 1
+                print("Starting Sensor Data Stop Thread")
+                url_send = url_stop
+                threading.Thread(target=URL_Thread,args=(url_send,)).start()
+                current_waypoint += 1
+                # Stiching stop signal goes here
+                
 
-            if reached_msg.seq == 1 and mission_end_flag == 1 :
-                print("Final waypoint reached. Mission complete.")
+            if idx_start == 3 and idx_center == 3  :
+                print("Mission complete. Stopping monitoring")
                 break
         
-            if reached_msg.seq == 1 and mission_end_flag == 0 :
-                mission_end_flag = 1
-
-    
+            
